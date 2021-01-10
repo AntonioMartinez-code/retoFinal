@@ -18,6 +18,8 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         etUsuario = (EditText) findViewById(R.id.etUsuario);
         etContrasena = (EditText) findViewById(R.id.etContrasena);
+         overridePendingTransition(R.xml.slide_up,R.xml.slide_off);
+
     }
 
     public void logear(View v){

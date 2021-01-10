@@ -20,13 +20,14 @@ public class registro extends AppCompatActivity {
         etUsuario = (EditText) findViewById(R.id.etUsuarioR);
         etContrasena = (EditText) findViewById(R.id.etContrasenaR);
         etRepite = (EditText) findViewById(R.id.etRepite);
+        overridePendingTransition(R.xml.slide_up,R.xml.slide_off);
     }
     public void VRegistrar(View v) {
         String usuario = etUsuario.getText().toString();
         String contrasena = etContrasena.getText().toString();
         String repite = etRepite.getText().toString();
 
-        if (!usuario.equals("") || !contrasena.equals("") || !repite.equals("")) {
+        if (!usuario.equals("") && !contrasena.equals("") && !repite.equals("")) {
             if (contrasena.equals(repite)) {
                 SharedPreferences preferencias = getSharedPreferences("base", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferencias.edit();
