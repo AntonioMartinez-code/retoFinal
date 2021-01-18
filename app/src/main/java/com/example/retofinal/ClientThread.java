@@ -9,9 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ClientThread implements Runnable {
-    private String sResultado;
+    private String sResultado = null;
+    private String sql;
 
-    public ClientThread() {
+    public ClientThread(String sql) {
+        this.sql = sql;
     }
 
     @Override
@@ -27,15 +29,16 @@ public class ClientThread implements Runnable {
 
             //Aqui pondriamos la IP y puerto.
             //sIP = "192.168.2.91";
-            sIP = "192.168.1.39";
+            sIP = "192.168.7.223";
             sPuerto = "3306";
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
             con = DriverManager.getConnection(url, "root", "");// Consulta sencilla en este caso.
-            String sql = "SELECT nombre FROM municipios";
+            //String sql = "SELECT Nombre FROM municipios";
             st = con.prepareStatement(sql);
             rs = st.executeQuery();//--
+
             while (rs.next()) {
                 String var1 = rs.getString(1);
 
@@ -71,6 +74,7 @@ public class ClientThread implements Runnable {
     }
 
     public String getResponse() {
+
         return sResultado;
     }
 }

@@ -20,7 +20,7 @@ public class portada extends AppCompatActivity {
     private ObjectAnimator animatorRotation;
     boolean pausa = false;
     private long animationDuration = 2000;
-
+    boolean bucle = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +29,17 @@ public class portada extends AppCompatActivity {
 
         btnIniciar = findViewById(R.id.btnIniciar);
         sol = findViewById(R.id.imgSol);
+
+           animatorRotation = ObjectAnimator.ofFloat(sol, "rotation", 0f, 360f);
+           animatorRotation.setDuration(animationDuration);
+           AnimatorSet animatorSetRotator = new AnimatorSet();
+           animatorSetRotator.playTogether(animatorRotation);
+           animatorSetRotator.start();
+
         btnIniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animacion();
+                btnIniciar();
 
 
 
@@ -40,30 +47,20 @@ public class portada extends AppCompatActivity {
         });
     }
 
-    public void animacion() {
+    public void btnIniciar() {
 
 
-                animatorRotation = ObjectAnimator.ofFloat(sol, "rotation", 0f, 360f);
-                animatorRotation.setDuration(animationDuration);
-                AnimatorSet animatorSetRotator = new AnimatorSet();
-                animatorSetRotator.playTogether(animatorRotation);
-                animatorSetRotator.start();
 
 
-       //sleep();
+
+
 
         Intent i = new Intent(this, login.class);
         startActivity(i);
-       // overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
-        }
-        public void sleep(){
-            try {
-                Thread.sleep(2000);
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+
+
     }
 
 
