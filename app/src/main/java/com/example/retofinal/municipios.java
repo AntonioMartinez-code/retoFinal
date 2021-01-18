@@ -126,8 +126,9 @@ public class municipios extends AppCompatActivity {
     }
 
     private String conectar() throws InterruptedException {
-        String sql = "SELECT Nombre FROM municipios";
-        ClientThread clientThread = new ClientThread(sql);
+        String sql = "SELECT Nombre FROM municipios WHERE CodMuni=0";
+        String tipo = "municipios";
+        ClientThread clientThread = new ClientThread(sql,tipo);
 
         Thread thread = new Thread(clientThread);
         thread.start();

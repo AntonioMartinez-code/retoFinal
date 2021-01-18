@@ -11,9 +11,11 @@ import java.sql.SQLException;
 public class ClientThread implements Runnable {
     private String sResultado = null;
     private String sql;
+    private String tipo;
 
-    public ClientThread(String sql) {
+    public ClientThread(String sql, String tipo) {
         this.sql = sql;
+        this.tipo = tipo;
     }
 
     @Override
@@ -28,23 +30,44 @@ public class ClientThread implements Runnable {
             Class.forName("com.mysql.jdbc.Driver");
 
             //Aqui pondriamos la IP y puerto.
-            //sIP = "192.168.2.91";
-            sIP = "192.168.7.223";
+            sIP = "192.168.7.231";
+            //sIP = "192.168.7.223";
             sPuerto = "3306";
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
             con = DriverManager.getConnection(url, "root", "");// Consulta sencilla en este caso.
             //String sql = "SELECT Nombre FROM municipios";
-            st = con.prepareStatement(sql);
-            rs = st.executeQuery();//--
 
-            while (rs.next()) {
-                String var1 = rs.getString(1);
+            switch(tipo){
 
-                Log.i("XXXXXXX", var1);
-                sResultado = var1;
+                case "login":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();//--
+
+                    while (rs.next()) {
+                        String var1 = rs.getString(1);
+
+                        Log.i("XXXXXXX", var1);
+                        sResultado = var1;
+                    }
+                    break;
+                case "registrar":
+                    st = con.prepareStatement(sql);
+                    st.execute(sql);
+                    break;
+                case "municipios":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        String var1 = rs.getString(1);
+
+                        Log.i("XXXXXXX", var1);
+                        sResultado = var1;
+                    }
+                    break;
             }
+
         } catch (ClassNotFoundException e) {
             Log.e("ClassNotFoundException", "");
             e.printStackTrace();

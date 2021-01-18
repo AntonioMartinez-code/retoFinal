@@ -4,35 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.util.HashMap;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
 
 public class registro extends AppCompatActivity {
     EditText etUsuario, etContrasena, etRepite;
-
+    private ConnectivityManager connectivityManager = null;
+    String hash="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +36,9 @@ public class registro extends AppCompatActivity {
 
         if (!usuario.equals("") && !contrasena.equals("") && !repite.equals("")) {
             if (contrasena.equals(repite)) {
-                SharedPreferences preferencias = getSharedPreferences("base", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferencias.edit();
-                editor.putString("usuario", usuario);
+                //SharedPreferences preferencias = getSharedPreferences("base", Context.MODE_PRIVATE);
+                //SharedPreferences.Editor editor = preferencias.edit();
+                //editor.putString("usuario", usuario);
 
 
                 String paraHash = contrasena;
@@ -60,11 +46,19 @@ public class registro extends AppCompatActivity {
                 byte dataBytes[] = paraHash.getBytes();
                 md.update(dataBytes);
                 byte resumen[] = md.digest();
-                String hash = new String(resumen);
-
-                editor.putString("contrasena", hash);
+                hash = new String(resumen);
+                try {
+                    if (isConnected()) {
+                        conectar();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "ERROR_NO_INTERNET", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (InterruptedException e) {// This cannot happen!
+                    Toast.makeText(getApplicationContext(), "ERROR_GENERAL", Toast.LENGTH_SHORT).show();
+                }
+                /*editor.putString("contrasena", hash);
                     editor.commit();
-                    finish();
+                    finish();*/
                     Toast.makeText(this, "Usuario registrado con exito", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(this, login.class);
                     startActivity(intent);
@@ -83,7 +77,33 @@ public class registro extends AppCompatActivity {
         startActivity(i);
     }
 
+    private void conectar() throws InterruptedException {
+        String sql = "INSERT INTO `usuarios`(`Nombre`, `Password`) VALUES ('"+ etUsuario.getText() +"','"+ hash +"')";
+        String tipo = "registrar";
+        ClientThread clientThread = new ClientThread(sql,tipo);
 
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+        String variable = null;
+        // Esperar respusta del servidor...
+        while (variable == null) {
+            variable = clientThread.getResponse();
+        }
+        Log.i("log : metodo Conectar ", variable);
+    }
 
+    public boolean isConnected() {
+        boolean ret = false;
+        try {
+            connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+            if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
+                ret = true;
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+        }
+        return ret;
+    }
 
 }
