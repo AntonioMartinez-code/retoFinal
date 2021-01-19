@@ -49,18 +49,12 @@ public class login extends AppCompatActivity {
         String contrasena = etContrasena.getText().toString();
        // SharedPreferences prefe =getSharedPreferences("base", Context.MODE_PRIVATE);
 
-        String paraHash = contrasena;
-        MessageDigest md = MessageDigest.getInstance("SHA");
-        byte dataBytes[] = paraHash.getBytes();
-        md.update(dataBytes);
-        byte resumen[] = md.digest();
-        String hash = new String(resumen);
 
+        //String hash = Hash.Hashear(contrasena);
+        String hash = contrasena;
         //String contrasenaP = prefe.getString("contrasena", "");
         //String usuarioP = prefe.getString("usuario", "");
 
-        //Log.i("Contrasena hash",hash);
-        //Log.i("ContrasenaP",contrasenaP);
         String contrasenaP="";
         try {
             if (isConnected()) {
@@ -68,6 +62,7 @@ public class login extends AppCompatActivity {
                 if (null == sRespuesta) { // Si la respuesta es null, una excepción ha ocurrido.
                     Toast.makeText(getApplicationContext(), "ERROR_COMUNICACION", Toast.LENGTH_SHORT).show();
                 } else {
+
                     contrasenaP = sRespuesta;
                 }
             } else {

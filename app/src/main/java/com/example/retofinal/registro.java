@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 public class registro extends AppCompatActivity {
     EditText etUsuario, etContrasena, etRepite;
     private ConnectivityManager connectivityManager = null;
-    String hash="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,15 +41,16 @@ public class registro extends AppCompatActivity {
                 //editor.putString("usuario", usuario);
 
 
-                String paraHash = contrasena;
+                /*String paraHash = contrasena;
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 byte dataBytes[] = paraHash.getBytes();
                 md.update(dataBytes);
-                byte resumen[] = md.digest();
-                hash = new String(resumen);
+                byte resumen[] = md.digest();*/
+                //String hash = Hash.Hashear(contrasena);
+                String hash = contrasena;
                 try {
                     if (isConnected()) {
-                        conectar();
+                        conectar(hash);
                     } else {
                         Toast.makeText(getApplicationContext(), "ERROR_NO_INTERNET", Toast.LENGTH_SHORT).show();
                     }
@@ -77,7 +78,7 @@ public class registro extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void conectar() throws InterruptedException {
+    private void conectar(String hash) throws InterruptedException {
         String sql = "INSERT INTO `usuarios`(`Nombre`, `Password`) VALUES ('"+ etUsuario.getText() +"','"+ hash +"')";
         String tipo = "registrar";
         ClientThread clientThread = new ClientThread(sql,tipo);
@@ -85,12 +86,7 @@ public class registro extends AppCompatActivity {
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
-        String variable = null;
-        // Esperar respusta del servidor...
-        while (variable == null) {
-            variable = clientThread.getResponse();
-        }
-        Log.i("log : metodo Conectar ", variable);
+
     }
 
     public boolean isConnected() {
