@@ -7,11 +7,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ClientThread implements Runnable {
     private String sResultado = null;
     private String sql;
     private String tipo;
+    private ArrayList<ObjetoMunicipios> arrayMun = new ArrayList<ObjetoMunicipios>();
+    private ArrayList<ObjetoEspacios> arrayEsp = new ArrayList<ObjetoEspacios>();
 
     public ClientThread(String sql, String tipo) {
         this.sql = sql;
@@ -36,8 +39,7 @@ public class ClientThread implements Runnable {
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "root", "");// Consulta sencilla en este caso.
-            //String sql = "SELECT Nombre FROM municipios";
+            con = DriverManager.getConnection(url, "root", "");
 
             switch(tipo){
 
@@ -47,8 +49,6 @@ public class ClientThread implements Runnable {
 
                     while (rs.next()) {
                         String var1 = rs.getString(1);
-
-                        Log.i("XXXXXXX", var1);
                         sResultado = var1;
                     }
                     break;
@@ -60,10 +60,25 @@ public class ClientThread implements Runnable {
                     st = con.prepareStatement(sql);
                     rs = st.executeQuery();
                     while (rs.next()) {
-                        String var1 = rs.getString(1);
-
-                        Log.i("XXXXXXX", var1);
-                        sResultado = var1;
+                        ObjetoMunicipios mun = new ObjetoMunicipios();
+                        mun.setCodMuni(rs.getInt(2));
+                        mun.setNombre(rs.getString(3));
+                        mun.setDescripcion(rs.getString(4));
+                        mun.setCodProv(rs.getInt(5));
+                        arrayMun.add(mun);
+                    }
+                    break;
+                case "espacios":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        ObjetoEspacios esp = new ObjetoEspacios();
+                        esp.setCodEspacio(rs.getInt(1));
+                        esp.setNombre(rs.getString(2));
+                        esp.setDescripcion(rs.getString(3));
+                        esp.setTipo(rs.getString(4));
+                        esp.setCodProv(rs.getInt(5));
+                        arrayEsp.add(esp);
                     }
                     break;
             }
@@ -99,6 +114,16 @@ public class ClientThread implements Runnable {
     public String getResponse() {
 
         return sResultado;
+    }
+
+    public ArrayList<ObjetoMunicipios> getArrayMun() {
+
+        return arrayMun;
+    }
+
+    public ArrayList<ObjetoEspacios> getArrayEsp() {
+
+        return arrayEsp;
     }
 }
 
