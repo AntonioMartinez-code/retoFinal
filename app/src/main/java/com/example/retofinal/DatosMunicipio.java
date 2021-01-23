@@ -12,8 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,14 +25,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
-public class DatosMunicipio extends AppCompatActivity {
+public class DatosMunicipio extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     private static final int REQUEST_IMAGE_CAPTURE =1;
     private TextView tNombre,tDescripcion;
     private Button btnUbicacion,btnCamara,btnAtras;
     private int CodUsu,CodMuni;
-    private String nom,desc,imagenHash;
+    private String nom,desc,imagenHash,ubicacion,existe;
     private ImageView imagen1;
+    private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
 
     @Override
@@ -43,18 +47,42 @@ public class DatosMunicipio extends AppCompatActivity {
         btnCamara = findViewById(R.id.btnCamara);
         btnUbicacion = findViewById(R.id.btnUbicacion);
         imagen1 = findViewById(R.id.imageView);
+        cbFav = findViewById(R.id.checkBox);
+        cbFav.setOnCheckedChangeListener(this);
         nom = getIntent().getExtras().get("nombre").toString();
         desc = getIntent().getExtras().get("descripcion").toString();
         CodMuni = (Integer)getIntent().getExtras().get("codmuni");
         CodUsu = ClientThread.codigousuario;
+        ubicacion=getIntent().getExtras().get("ubicacion").toString();
 
         tNombre.setText(nom);
         tDescripcion.setText(desc);
+
+        conectarOnClick("comprobar");
+        if(!existe.equals("0")){
+            cbFav.setChecked(true);
+        }else {
+            cbFav.setChecked(false);
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(cbFav.isChecked()){
+            conectarOnClick("insertar");
+        } else if(!cbFav.isChecked()){
+            conectarOnClick("borrar");
+        }
     }
 
     public void atras(View v){
-        Intent i = new Intent(this, municipios.class);
-        startActivity(i);
+        if(ubicacion.equals("lista")){
+            Intent i = new Intent(this, municipios.class);
+            startActivity(i);
+        }else{
+            Intent i = new Intent(this, favoritos.class);
+            startActivity(i);
+        }
     }
 
     public void tomarFoto(View v) {
@@ -75,16 +103,21 @@ public class DatosMunicipio extends AppCompatActivity {
             imageBit.compress(Bitmap.CompressFormat.JPEG, 100,out);
             byte[] arrayFoto = out.toByteArray();
             imagenHash = String.valueOf(Base64.encode(arrayFoto, Base64.DEFAULT));
-            conectarOnClick(null);
+            conectarOnClick("");
         }
     }
 
-    public void conectarOnClick(View v) {
+    public void conectarOnClick(String tipo) {
         try {
 
             if (isConnected()) {
-                if (null == conectar()) { // Si la respuesta es null, una excepción ha ocurrido.
-                    Toast.makeText(getApplicationContext(), "ERROR_COMUNICACION", Toast.LENGTH_SHORT).show();
+                if(tipo.equals("")) {
+                    conectar();
+                }else if(tipo.equals("comprobar")){
+                        existe = conectarComp();
+                    } else{
+                    Log.i("FFF",tipo);
+                    conectarFav(tipo);
                 }
 
             } else {
@@ -95,17 +128,41 @@ public class DatosMunicipio extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "ERROR_GENERAL", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private String conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",'"+imagenHash+"')";
-        String tipo = "foto";
+    private String conectarComp() throws InterruptedException {
+        String sql = "SELECT Count(*) FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
+        String tipo = "comprobarFav";
         ClientThread clientThread = new ClientThread(sql,tipo);
-
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
+        String variable = null;
+        while (variable == null) {
+            variable = clientThread.getResponse();
+        }
+        return clientThread.getResponse();
+    }
 
-        return "ok";
+    private void conectar() throws InterruptedException {
+        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",'"+imagenHash+"')";
+        String tipo = "foto";
+        ClientThread clientThread = new ClientThread(sql,tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+    }
+
+    private void conectarFav(String tip) throws InterruptedException {
+        String sql="";
+        if(tip.equals("insertar")){
+            sql = "INSERT INTO favmun (CodUsu,CodMuni) VALUES ("+CodUsu+","+CodMuni+")";
+        }else if(tip.equals("borrar")){
+            sql = "DELETE FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
+        }
+        String tipo = "favorito";
+        ClientThread clientThread = new ClientThread(sql,tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
     }
 
     public boolean isConnected() {

@@ -128,7 +128,7 @@ public class municipios extends AppCompatActivity {
     }
 
     private ArrayList<ObjetoMunicipios> conectar() throws InterruptedException {
-        String sql = "SELECT * FROM municipios";
+        String sql = "SELECT CodMuni,Nombre,Descripcion,CodProv FROM municipios";
         String tipo = "municipios";
         ClientThread clientThread = new ClientThread(sql,tipo);
 
@@ -162,6 +162,7 @@ public class municipios extends AppCompatActivity {
         i.putExtra("nombre",obj.getNombre());
         i.putExtra("descripcion",obj.getDescripcion());
         i.putExtra("codmuni",obj.getCodMuni());
+        i.putExtra("ubicacion","lista");
         startActivity(i);
     }
 }

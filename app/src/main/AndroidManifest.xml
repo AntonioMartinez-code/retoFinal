@@ -16,7 +16,6 @@
         android:theme="@style/Theme.RetoFinal">
         <activity android:name=".DatosEspacio"></activity>
         <activity android:name=".DatosMunicipio" />
-        <activity android:name=".olvidarContra" />
         <activity android:name=".login" /> <!-- activity android:name=".conexion"/ -->
         <activity android:name=".datosMunicipios" />
         <activity android:name=".favoritos" />
