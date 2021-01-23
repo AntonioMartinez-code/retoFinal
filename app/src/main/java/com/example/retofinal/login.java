@@ -91,7 +91,7 @@ public class login extends AppCompatActivity {
     }
 
     private String conectar() throws InterruptedException {
-        String sql = "SELECT Password FROM usuarios WHERE Nombre='"+ etUsuario.getText()  +"'";
+        String sql = "SELECT CodUsu,Password FROM usuarios WHERE Nombre='"+ etUsuario.getText()  +"'";
         String tipo = "login";
         ClientThread clientThread = new ClientThread(sql,tipo);
 

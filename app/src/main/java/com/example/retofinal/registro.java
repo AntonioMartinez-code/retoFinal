@@ -36,10 +36,6 @@ public class registro extends AppCompatActivity {
 
         if (!usuario.equals("") && !contrasena.equals("") && !repite.equals("")) {
             if (contrasena.equals(repite)) {
-                //SharedPreferences preferencias = getSharedPreferences("base", Context.MODE_PRIVATE);
-                //SharedPreferences.Editor editor = preferencias.edit();
-                //editor.putString("usuario", usuario);
-
 
                 /*String paraHash = contrasena;
                 MessageDigest md = MessageDigest.getInstance("SHA");
