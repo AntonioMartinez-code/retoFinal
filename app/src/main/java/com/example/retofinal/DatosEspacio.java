@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 
 public class DatosEspacio extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
@@ -32,7 +34,7 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
     private ImageView imagen1;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
-
+    ArrayList<ObjetoEspacios> variable = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,25 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File foto = new File(getExternalFilesDir(null), "foto.jpg");
         startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
+    }
+    public void googleMaps(View view) throws InterruptedException {
+        String sql = "SELECT latitud,longitud FROM espacios WHERE  CodEspacio=" + CodEspacio + "";
+        String tipo = "ubicacionEsp";
+        ClientThread clientThread = new ClientThread(sql, tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+
+        while (variable == null) {
+            variable = clientThread.getArrayEsp();
+        }
+
+        if (variable.get(0).getLatitud() == null || variable.get(0).getLongitud() == null  ){
+            Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
+        }else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLatitud() + "," + variable.get(0).getLongitud() + ""));
+            startActivity(intent);
+        }
     }
 
     @Override

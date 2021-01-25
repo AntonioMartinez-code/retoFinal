@@ -93,7 +93,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
 
     public void googleMaps(View view) throws InterruptedException {
         String sql = "SELECT latitud,longitud FROM municipios WHERE  CodMuni=" + CodMuni + "";
-        String tipo = "ubicacion";
+        String tipo = "ubicacionMun";
         ClientThread clientThread = new ClientThread(sql, tipo);
         Thread thread = new Thread(clientThread);
         thread.start();
