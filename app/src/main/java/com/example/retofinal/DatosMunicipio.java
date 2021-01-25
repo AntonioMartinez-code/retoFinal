@@ -39,6 +39,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     private ConnectivityManager connectivityManager = null;
     public static File foto;
     private Bitmap bit=null;
+    private ArrayList<ObjetoMunicipios> variable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +124,25 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
 
         return foto;
     }
+    public void googleMaps(View view) throws InterruptedException {
+        String sql = "SELECT latitud,longitud FROM municipios WHERE  CodMuni=" + CodMuni + "";
+        String tipo = "ubicacion";
+        ClientThread clientThread = new ClientThread(sql, tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
 
+        while (variable == null) {
+            variable = clientThread.getArrayMun();
+        }
+
+        if (variable.get(0).getLatitud() == null || variable.get(0).getLongitud() == null  ){
+            Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
+        }else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLatitud() + "," + variable.get(0).getLongitud() + ""));
+            startActivity(intent);
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
