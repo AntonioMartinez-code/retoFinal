@@ -1,8 +1,12 @@
 package com.example.retofinal;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,9 +18,15 @@ public class ClientThread implements Runnable {
     private String sResultado = null;
     private String sql;
     private String tipo;
+    private Bitmap imagen;
     private ArrayList<ObjetoMunicipios> arrayMun = new ArrayList<ObjetoMunicipios>();
     private ArrayList<ObjetoEspacios> arrayEsp = new ArrayList<ObjetoEspacios>();
     public static int codigousuario;
+    File foto;
+
+    public void setFoto(File foto) {
+        this.foto = foto;
+    }
 
     public ClientThread(String sql, String tipo) {
         this.sql = sql;
@@ -31,6 +41,8 @@ public class ClientThread implements Runnable {
         String sIP;
         String sPuerto;
         String sBBDD;
+
+
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
@@ -117,10 +129,10 @@ public class ClientThread implements Runnable {
                     }
                     break;
                 case "foto":
-                    FileInputStream convertir = new FileInputStream(DatosMunicipio.foto);
+                    FileInputStream convertir = new FileInputStream(foto);
                     st = con.prepareStatement(sql);
-                    st.setBlob(1,convertir,DatosMunicipio.foto.length());
-                    st.execute(sql);
+                    st.setBlob(1,convertir,foto.length());
+                    st.executeUpdate();
                     break;
                 case "favorito":
                     st = con.prepareStatement(sql);
@@ -132,6 +144,17 @@ public class ClientThread implements Runnable {
                     while (rs.next()) {
                         String var1 = rs.getString(1);
                         sResultado = var1;
+                    }
+                    break;
+                case "comprobarFoto":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        Blob var1 = rs.getBlob(1);
+                        int blobLength = (int) var1.length();
+                        byte[] blobByte = var1.getBytes(1,blobLength);
+                        imagen = BitmapFactory.decodeByteArray(blobByte,0,blobByte.length);
+
                     }
                     break;
             }
@@ -167,6 +190,11 @@ public class ClientThread implements Runnable {
     public String getResponse() {
 
         return sResultado;
+    }
+
+    public Bitmap getImage() {
+
+        return imagen;
     }
 
     public ArrayList<ObjetoMunicipios> getArrayMun() {

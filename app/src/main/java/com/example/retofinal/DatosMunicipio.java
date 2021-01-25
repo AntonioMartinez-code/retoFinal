@@ -38,6 +38,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
     public static File foto;
+    private Bitmap bit=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,13 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             cbFav.setChecked(true);
         }else {
             cbFav.setChecked(false);
+        }
+        conectarOnClick("foto");
+        if(bit != null){
+            btnCamara.setEnabled(false);
+            imagen1.setImageBitmap(bit);
+        } else{
+            btnCamara.setEnabled(true);
         }
     }
 
@@ -136,7 +144,9 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
                     conectar();
                 }else if(tipo.equals("comprobar")){
                         existe = conectarComp();
-                    } else{
+                }else if(tipo.equals("foto")){
+                    bit = conectarFoto();
+                }  else{
                     Log.i("FFF",tipo);
                     conectarFav(tipo);
                 }
@@ -163,10 +173,21 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         return clientThread.getResponse();
     }
 
+    private Bitmap conectarFoto() throws InterruptedException {
+        String sql = "SELECT foto FROM fotomun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
+        String tipo = "comprobarFoto";
+        ClientThread clientThread = new ClientThread(sql,tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+        return clientThread.getImage();
+    }
+
     private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",?)";
+        String sql = "INSERT INTO fotomun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",?)";
         String tipo = "foto";
         ClientThread clientThread = new ClientThread(sql,tipo);
+        clientThread.setFoto(foto);
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
