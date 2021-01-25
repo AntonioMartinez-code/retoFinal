@@ -1,6 +1,7 @@
 package com.example.retofinal;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,26 +24,27 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DatosMunicipio extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private TextView tNombre, tDescripcion;
-    private Button btnUbicacion, btnCamara, btnAtras;
-    private int CodUsu, CodMuni;
-    private String nom, desc, imagenHash, ubicacion, existe;
+    private static final int REQUEST_IMAGE_CAPTURE =1;
+    private TextView tNombre,tDescripcion;
+    private Button btnUbicacion,btnCamara,btnAtras;
+    private int CodUsu,CodMuni;
+    private String nom,desc,imagenHash,ubicacion,existe,rutaImagen;
     private ImageView imagen1;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
-    ArrayList<ObjetoMunicipios> variable = null;
+    public static File foto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos_municipio);
 
-        tNombre = findViewById(R.id.tNombre);
-        tDescripcion = findViewById(R.id.tDescripcion);
+        tNombre= findViewById(R.id.tNombre);
+        tDescripcion= findViewById(R.id.tDescripcion);
         btnAtras = findViewById(R.id.btnAtras);
         btnCamara = findViewById(R.id.btnCamara);
         btnUbicacion = findViewById(R.id.btnUbicacion);
@@ -51,78 +53,77 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         cbFav.setOnCheckedChangeListener(this);
         nom = getIntent().getExtras().get("nombre").toString();
         desc = getIntent().getExtras().get("descripcion").toString();
-        CodMuni = (Integer) getIntent().getExtras().get("codmuni");
+        CodMuni = (Integer)getIntent().getExtras().get("codmuni");
         CodUsu = ClientThread.codigousuario;
-        ubicacion = getIntent().getExtras().get("ubicacion").toString();
+        ubicacion=getIntent().getExtras().get("ubicacion").toString();
 
         tNombre.setText(nom);
         tDescripcion.setText(desc);
 
         conectarOnClick("comprobar");
-        if (!existe.equals("0")) {
+        if(!existe.equals("0")){
             cbFav.setChecked(true);
-        } else {
+        }else {
             cbFav.setChecked(false);
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (cbFav.isChecked()) {
+        if(cbFav.isChecked()){
             conectarOnClick("insertar");
-        } else if (!cbFav.isChecked()) {
+        } else if(!cbFav.isChecked()){
             conectarOnClick("borrar");
         }
     }
 
-    public void atras(View v) {
-        if (ubicacion.equals("lista")) {
+    public void atras(View v){
+        if(ubicacion.equals("lista")){
             Intent i = new Intent(this, municipios.class);
             startActivity(i);
-        } else {
+        }else{
             Intent i = new Intent(this, favoritos.class);
             startActivity(i);
         }
     }
 
-    public void tomarFoto(View v) {
+    public void tomarFoto(View v){
         Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File foto = new File(getExternalFilesDir(null), "foto.jpg");
-        startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
-    }
 
-    public void googleMaps(View view) throws InterruptedException {
-        String sql = "SELECT latitud,longitud FROM municipios WHERE  CodMuni=" + CodMuni + "";
-        String tipo = "ubicacionMun";
-        ClientThread clientThread = new ClientThread(sql, tipo);
-        Thread thread = new Thread(clientThread);
-        thread.start();
-        thread.join();
+        File imagenArchivo = null;
 
-        while (variable == null) {
-           variable = clientThread.getArrayMun();
+        try{
+            imagenArchivo = crearImagen();
+        } catch (IOException e) {
+            Log.e("error",e.toString());
         }
 
-    if (variable.get(0).getLatitud() == null || variable.get(0).getLongitud() == null  ){
-        Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
-    }else {
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLatitud() + "," + variable.get(0).getLongitud() + ""));
-    startActivity(intent);
+        if(imagenArchivo!=null){
+            Uri fotoUri= FileProvider.getUriForFile(this,"com.example.retofinal.fileprovider",imagenArchivo);
+            intento1.putExtra(MediaStore.EXTRA_OUTPUT,fotoUri);
+            startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
+        }
+
+
     }
+
+    public File crearImagen() throws IOException {
+        String nombreFoto ="foto_";
+        File directorio = getExternalFilesDir(null);
+        foto = File.createTempFile(nombreFoto,".jpg",directorio);
+        rutaImagen = foto.getAbsolutePath();
+
+        return foto;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle ex = data.getExtras();
-            Bitmap imageBit = (Bitmap) ex.get("data");
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            //Bundle ex = data.getExtras();
+            Bitmap imageBit = BitmapFactory.decodeFile(rutaImagen);
             imagen1.setImageBitmap(imageBit);
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            imageBit.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            byte[] arrayFoto = out.toByteArray();
-            imagenHash = String.valueOf(Base64.encode(arrayFoto, Base64.DEFAULT));
             conectarOnClick("");
         }
     }
@@ -131,12 +132,12 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         try {
 
             if (isConnected()) {
-                if (tipo.equals("")) {
+                if(tipo.equals("")) {
                     conectar();
-                } else if (tipo.equals("comprobar")) {
-                    existe = conectarComp();
-                } else {
-                    Log.i("FFF", tipo);
+                }else if(tipo.equals("comprobar")){
+                        existe = conectarComp();
+                    } else{
+                    Log.i("FFF",tipo);
                     conectarFav(tipo);
                 }
 
@@ -148,11 +149,10 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             Toast.makeText(getApplicationContext(), "ERROR_GENERAL", Toast.LENGTH_SHORT).show();
         }
     }
-
     private String conectarComp() throws InterruptedException {
-        String sql = "SELECT Count(*) FROM favmun WHERE CodUsu=" + CodUsu + " AND CodMuni=" + CodMuni + "";
+        String sql = "SELECT Count(*) FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
         String tipo = "comprobarFav";
-        ClientThread clientThread = new ClientThread(sql, tipo);
+        ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
@@ -164,23 +164,23 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     }
 
     private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES (" + CodUsu + "," + CodMuni + ",'" + imagenHash + "')";
+        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",?)";
         String tipo = "foto";
-        ClientThread clientThread = new ClientThread(sql, tipo);
+        ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
     }
 
     private void conectarFav(String tip) throws InterruptedException {
-        String sql = "";
-        if (tip.equals("insertar")) {
-            sql = "INSERT INTO favmun (CodUsu,CodMuni) VALUES (" + CodUsu + "," + CodMuni + ")";
-        } else if (tip.equals("borrar")) {
-            sql = "DELETE FROM favmun WHERE CodUsu=" + CodUsu + " AND CodMuni=" + CodMuni + "";
+        String sql="";
+        if(tip.equals("insertar")){
+            sql = "INSERT INTO favmun (CodUsu,CodMuni) VALUES ("+CodUsu+","+CodMuni+")";
+        }else if(tip.equals("borrar")){
+            sql = "DELETE FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
         }
         String tipo = "favorito";
-        ClientThread clientThread = new ClientThread(sql, tipo);
+        ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
