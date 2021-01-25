@@ -2,6 +2,7 @@ package com.example.retofinal;
 
 import android.util.Log;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,8 +35,8 @@ public class ClientThread implements Runnable {
             Class.forName("com.mysql.jdbc.Driver");
 
             //Aqui pondriamos la IP y puerto.
-            //sIP = "192.168.7.231";
-            sIP = "192.168.1.136";//casa
+            sIP = "192.168.7.231";
+            //sIP = "192.168.1.136";//casa
             sPuerto = "3306";
             sBBDD = "retofinal";
 
@@ -88,7 +89,9 @@ public class ClientThread implements Runnable {
                     }
                     break;
                 case "foto":
+                    FileInputStream convertir = new FileInputStream(DatosMunicipio.foto);
                     st = con.prepareStatement(sql);
+                    st.setBlob(1,convertir,DatosMunicipio.foto.length());
                     st.execute(sql);
                     break;
                 case "favorito":

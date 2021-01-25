@@ -1,6 +1,7 @@
 package com.example.retofinal;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DatosMunicipio extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -31,11 +33,11 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     private TextView tNombre,tDescripcion;
     private Button btnUbicacion,btnCamara,btnAtras;
     private int CodUsu,CodMuni;
-    private String nom,desc,imagenHash,ubicacion,existe;
+    private String nom,desc,imagenHash,ubicacion,existe,rutaImagen;
     private ImageView imagen1;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
-
+    public static File foto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,24 +87,43 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         }
     }
 
-    public void tomarFoto(View v) {
+    public void tomarFoto(View v){
         Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File foto = new File(getExternalFilesDir(null), "foto.jpg");
-        startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
+
+        File imagenArchivo = null;
+
+        try{
+            imagenArchivo = crearImagen();
+        } catch (IOException e) {
+            Log.e("error",e.toString());
+        }
+
+        if(imagenArchivo!=null){
+            Uri fotoUri= FileProvider.getUriForFile(this,"com.example.retofinal.fileprovider",imagenArchivo);
+            intento1.putExtra(MediaStore.EXTRA_OUTPUT,fotoUri);
+            startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
+        }
+
+
+    }
+
+    public File crearImagen() throws IOException {
+        String nombreFoto ="foto_";
+        File directorio = getExternalFilesDir(null);
+        foto = File.createTempFile(nombreFoto,".jpg",directorio);
+        rutaImagen = foto.getAbsolutePath();
+
+        return foto;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            Bundle ex = data.getExtras();
-            Bitmap imageBit = (Bitmap) ex.get("data");
+            //Bundle ex = data.getExtras();
+            Bitmap imageBit = BitmapFactory.decodeFile(rutaImagen);
             imagen1.setImageBitmap(imageBit);
 
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            imageBit.compress(Bitmap.CompressFormat.JPEG, 100,out);
-            byte[] arrayFoto = out.toByteArray();
-            imagenHash = String.valueOf(Base64.encode(arrayFoto, Base64.DEFAULT));
             conectarOnClick("");
         }
     }
@@ -143,7 +164,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     }
 
     private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",'"+imagenHash+"')";
+        String sql = "INSERT INTO fotosmun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",?)";
         String tipo = "foto";
         ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
