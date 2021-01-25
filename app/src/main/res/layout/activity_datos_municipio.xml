@@ -35,6 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:onClick="tomarFoto"
         android:text="Camara"
         app:background="@drawable/camara"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,4 +64,26 @@
         app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintStart_toEndOf="@+id/btnUbicacion"
         app:layout_constraintTop_toBottomOf="@+id/tDescripcion" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="125dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="96dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toEndOf="@+id/tDescripcion"
+        app:layout_constraintTop_toBottomOf="@+id/tNombre"
+        tools:srcCompat="@color/white" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Favorito"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toEndOf="@+id/tDescripcion"
+        app:layout_constraintTop_toBottomOf="@+id/tNombre" />
 </androidx.constraintlayout.widget.ConstraintLayout>

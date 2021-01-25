@@ -4,8 +4,9 @@
     <!-- Permiso para poder el estado de la red en el teléfono -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Permiso para poder acceder a internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +16,6 @@
         android:theme="@style/Theme.RetoFinal">
         <activity android:name=".DatosEspacio"></activity>
         <activity android:name=".DatosMunicipio" />
-        <activity android:name=".olvidarContra" />
         <activity android:name=".login" /> <!-- activity android:name=".conexion"/ -->
         <activity android:name=".datosMunicipios" />
         <activity android:name=".favoritos" />

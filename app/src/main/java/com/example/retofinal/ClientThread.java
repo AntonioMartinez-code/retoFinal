@@ -15,6 +15,7 @@ public class ClientThread implements Runnable {
     private String tipo;
     private ArrayList<ObjetoMunicipios> arrayMun = new ArrayList<ObjetoMunicipios>();
     private ArrayList<ObjetoEspacios> arrayEsp = new ArrayList<ObjetoEspacios>();
+    public static int codigousuario;
 
     public ClientThread(String sql, String tipo) {
         this.sql = sql;
@@ -33,13 +34,13 @@ public class ClientThread implements Runnable {
             Class.forName("com.mysql.jdbc.Driver");
 
             //Aqui pondriamos la IP y puerto.
-            sIP = "192.168.7.231";
-            //sIP = "192.168.7.223";
+            //sIP = "192.168.7.231";
+            sIP = "192.168.1.136";//casa
             sPuerto = "3306";
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "root", "");
+            con = DriverManager.getConnection(url, "user1", "");
 
             switch(tipo){
 
@@ -48,7 +49,8 @@ public class ClientThread implements Runnable {
                     rs = st.executeQuery();//--
 
                     while (rs.next()) {
-                        String var1 = rs.getString(1);
+                        codigousuario=rs.getInt(1);
+                        String var1 = rs.getString(2);
                         sResultado = var1;
                     }
                     break;
@@ -61,10 +63,10 @@ public class ClientThread implements Runnable {
                     rs = st.executeQuery();
                     while (rs.next()) {
                         ObjetoMunicipios mun = new ObjetoMunicipios();
-                        mun.setCodMuni(rs.getInt(2));
-                        mun.setNombre(rs.getString(3));
-                        mun.setDescripcion(rs.getString(4));
-                        mun.setCodProv(rs.getInt(5));
+                        mun.setCodMuni(rs.getInt(1));
+                        mun.setNombre(rs.getString(2));
+                        mun.setDescripcion(rs.getString(3));
+                        mun.setCodProv(rs.getInt(4));
                         arrayMun.add(mun);
                     }
                     break;
@@ -77,8 +79,28 @@ public class ClientThread implements Runnable {
                         esp.setNombre(rs.getString(2));
                         esp.setDescripcion(rs.getString(3));
                         esp.setTipo(rs.getString(4));
-                        esp.setCodProv(rs.getInt(5));
+                        try {
+                            esp.setCodProv(rs.getInt(5));
+                        }catch (Exception e){
+                        }
+
                         arrayEsp.add(esp);
+                    }
+                    break;
+                case "foto":
+                    st = con.prepareStatement(sql);
+                    st.execute(sql);
+                    break;
+                case "favorito":
+                    st = con.prepareStatement(sql);
+                    st.execute(sql);
+                    break;
+                case "comprobarFav":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        String var1 = rs.getString(1);
+                        sResultado = var1;
                     }
                     break;
             }

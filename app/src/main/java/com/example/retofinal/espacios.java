@@ -162,6 +162,8 @@ public class espacios extends AppCompatActivity {
         Intent i = new Intent(this, DatosEspacio.class);
         i.putExtra("nombre",obj.getNombre());
         i.putExtra("descripcion",obj.getDescripcion());
+        i.putExtra("codesp",obj.getCodEspacio());
+        i.putExtra("ubicacion","lista");
         startActivity(i);
     }
 }
