@@ -6,9 +6,26 @@ public class ObjetoMunicipios {
     private String Nombre;
     private String Descripcion;
     private int CodProv;
-
+    private String latitud;
+    private String longitud;
     public ObjetoMunicipios() {
 
+    }
+
+    public String getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(String latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(String longitud) {
+        this.longitud = longitud;
     }
 
     public int getCodMuni() {
