@@ -29,7 +29,7 @@ public class espacios extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_municipios);
+        setContentView(R.layout.activity_espacios);
         overridePendingTransition(R.xml.slide_up, R.xml.slide_off);
 
         btnBuscar = findViewById(R.id.btnBuscar);
@@ -60,7 +60,7 @@ public class espacios extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView adapterView, View view,
                                     int i, long l) {
-
+                datos(arrayEsp.get(i));
             }
         });
     }
@@ -128,7 +128,7 @@ public class espacios extends AppCompatActivity {
     }
 
     private ArrayList<ObjetoEspacios> conectar() throws InterruptedException {
-        //String sql = "SELECT * FROM espacios";
+
         String sql = "SELECT A.CodEspacio, A.Nombre, A.Descripcion, A.Tipo, C.CodProv FROM espacios A,ubicaciones B, municipios C WHERE A.CodEspacio = B.CodEspacio AND B.CodMuni = C.CodMuni ";
         String tipo = "espacios";
         ClientThread clientThread = new ClientThread(sql,tipo);
@@ -158,4 +158,10 @@ public class espacios extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void datos(ObjetoEspacios obj){
+        Intent i = new Intent(this, DatosEspacio.class);
+        i.putExtra("nombre",obj.getNombre());
+        i.putExtra("descripcion",obj.getDescripcion());
+        startActivity(i);
+    }
 }

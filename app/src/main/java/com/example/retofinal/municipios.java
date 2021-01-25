@@ -60,6 +60,7 @@ public class municipios extends AppCompatActivity {
             public void onItemClick(AdapterView adapterView, View view,
                                     int i, long l) {
 
+                datos(arrayMun.get(i));
             }
         });
     }
@@ -156,4 +157,10 @@ public class municipios extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void datos(ObjetoMunicipios obj){
+        Intent i = new Intent(this, DatosMunicipio.class);
+        i.putExtra("nombre",obj.getNombre());
+        i.putExtra("descripcion",obj.getDescripcion());
+        startActivity(i);
+    }
 }
