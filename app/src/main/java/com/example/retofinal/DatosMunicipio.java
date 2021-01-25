@@ -33,7 +33,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     private TextView tNombre,tDescripcion;
     private Button btnUbicacion,btnCamara,btnAtras;
     private int CodUsu,CodMuni;
-    private String nom,desc,imagenHash,ubicacion,existe,rutaImagen;
+    private String nom,desc,imagenHash,ubicacion,existe,rutaImagen,cambio;
     private ImageView imagen1;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
@@ -64,6 +64,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
 
         conectarOnClick("comprobar");
         if(!existe.equals("0")){
+            cambio="no";
             cbFav.setChecked(true);
         }else {
             cbFav.setChecked(false);
@@ -80,7 +81,9 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(cbFav.isChecked()){
-            conectarOnClick("insertar");
+            if(cambio!="no"){
+                conectarOnClick("insertar");
+            }
         } else if(!cbFav.isChecked()){
             conectarOnClick("borrar");
         }
@@ -203,7 +206,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     }
 
     private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotomun (CodUsu,CodMuni,Foto) VALUES ("+CodUsu+","+CodMuni+",?)";
+        String sql = "INSERT INTO fotomun (CodUsu,CodMuni,foto) VALUES ("+CodUsu+","+CodMuni+",?)";
         String tipo = "foto";
         ClientThread clientThread = new ClientThread(sql,tipo);
         clientThread.setFoto(foto);
