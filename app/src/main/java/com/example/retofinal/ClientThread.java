@@ -60,6 +60,7 @@ public class ClientThread implements Runnable {
                     st.execute(sql);
                     break;
                 case "municipios":
+                    arrayMun.clear();
                     st = con.prepareStatement(sql);
                     rs = st.executeQuery();
                     while (rs.next()) {
@@ -72,6 +73,7 @@ public class ClientThread implements Runnable {
                     }
                     break;
                 case "espacios":
+                    arrayEsp.clear();
                     st = con.prepareStatement(sql);
                     rs = st.executeQuery();
                     while (rs.next()) {
@@ -84,6 +86,32 @@ public class ClientThread implements Runnable {
                             esp.setCodProv(rs.getInt(5));
                         }catch (Exception e){
                         }
+
+                        arrayEsp.add(esp);
+                    }
+                    break;
+                case "ubicacionMun":
+                    arrayMun.clear();
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        ObjetoMunicipios mun = new ObjetoMunicipios();
+                        Log.i("latitud",rs.getString(1));
+                        mun.setLatitud(rs.getString(1));
+                        mun.setLongitud(rs.getString(2));
+
+                        arrayMun.add(mun);
+                    }
+                    break;
+                case "ubicacionEsp":
+                    arrayEsp.clear();
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        ObjetoEspacios esp = new ObjetoEspacios();
+                        Log.i("latitud",rs.getString(1));
+                        esp.setLatitud(rs.getString(1));
+                        esp.setLongitud(rs.getString(2));
 
                         arrayEsp.add(esp);
                     }
