@@ -35,12 +35,13 @@ public class ClientThread implements Runnable {
 
             //Aqui pondriamos la IP y puerto.
             //sIP = "192.168.7.231";
-            sIP = "192.168.1.136";//casa
+            //sIP = "192.168.1.136";//casa
+            sIP = "192.168.7.223";
             sPuerto = "3306";
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "user1", "");
+            con = DriverManager.getConnection(url, "root", "");
 
             switch(tipo){
 
@@ -103,6 +104,19 @@ public class ClientThread implements Runnable {
                         sResultado = var1;
                     }
                     break;
+                case "ubicacion":
+                    arrayMun.clear();
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    while (rs.next()) {
+                        ObjetoMunicipios mun = new ObjetoMunicipios();
+                        Log.i("latitud",rs.getString(1));
+                        mun.setLatitud(rs.getString(1));
+                        mun.setLongitud(rs.getString(2));
+
+                        arrayMun.add(mun);
+                    }
+                    break;
             }
 
         } catch (ClassNotFoundException e) {
@@ -147,5 +161,6 @@ public class ClientThread implements Runnable {
 
         return arrayEsp;
     }
+
 }
 
