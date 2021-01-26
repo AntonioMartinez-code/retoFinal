@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,10 +20,11 @@ import java.util.ArrayList;
 
 public class municipios extends AppCompatActivity {
     private Button btnBuscar,btnAtrasMun;
+    private String filtro;
     private ListView listview;
     private Spinner spinner;
     private ConnectivityManager connectivityManager = null;
-    private ArrayList<ObjetoMunicipios> arrayMun;
+    private ArrayList<ObjetoMunicipios> arrayMun,arrayMunP;
     private ArrayList<String> nombreMun;
 
     @Override
@@ -35,7 +37,7 @@ public class municipios extends AppCompatActivity {
         btnAtrasMun = findViewById(R.id.btnAtrasEsp);
         spinner = findViewById(R.id.spinner1);
         listview = findViewById(R.id.listview);
-
+        filtro="";
         String[] opciones = {"Bizkaia", "Gipuzkoa", "Alava"};
 
         ArrayAdapter<String> adapterSp = new ArrayAdapter<String>(this, android.
@@ -43,6 +45,7 @@ public class municipios extends AppCompatActivity {
         spinner.setAdapter(adapterSp);
 
         arrayMun = new ArrayList<ObjetoMunicipios>();
+        arrayMunP = new ArrayList<ObjetoMunicipios>();
         nombreMun = new ArrayList<String>();
 
         conectarOnClick(null);
@@ -59,19 +62,23 @@ public class municipios extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView adapterView, View view,
                                     int i, long l) {
+                if(filtro.equals("si")){
+                    datos(arrayMunP.get(i));
+                } else datos(arrayMun.get(i));
 
-                datos(arrayMun.get(i));
             }
         });
     }
     public void buscar(View v){
         String selec = spinner.getSelectedItem().toString();
+        filtro ="si";
         if (selec.equals("Bizkaia")) {
             nombreMun.clear();
-
+            arrayMunP.clear();
             for(int x=0;x<arrayMun.size();x++){
-                if(arrayMun.get(x).getCodProv() == 1){
+                if(arrayMun.get(x).getCodProv() == 48){
                     nombreMun.add(arrayMun.get(x).getNombre());
+                    arrayMunP.add(arrayMun.get(x));
                 }
 
                 ArrayAdapter<String> adapterLV = new ArrayAdapter<String>
@@ -83,8 +90,9 @@ public class municipios extends AppCompatActivity {
         } else if (selec.equals("Gipuzkoa")) {
             nombreMun.clear();
             for(int x=0;x<arrayMun.size();x++){
-                if(arrayMun.get(x).getCodProv() == 2){
+                if(arrayMun.get(x).getCodProv() == 20){
                     nombreMun.add(arrayMun.get(x).getNombre());
+                    arrayMunP.add(arrayMun.get(x));
                 }
 
                 ArrayAdapter<String> adapterLV = new ArrayAdapter<String>
@@ -96,8 +104,9 @@ public class municipios extends AppCompatActivity {
         } else if (selec.equals("Alava")) {
             nombreMun.clear();
             for(int x=0;x<arrayMun.size();x++){
-                if(arrayMun.get(x).getCodProv() == 3){
+                if(arrayMun.get(x).getCodProv() == 1){
                     nombreMun.add(arrayMun.get(x).getNombre());
+                    arrayMunP.add(arrayMun.get(x));
                 }
 
                 ArrayAdapter<String> adapterLV = new ArrayAdapter<String>
@@ -128,7 +137,7 @@ public class municipios extends AppCompatActivity {
     }
 
     private ArrayList<ObjetoMunicipios> conectar() throws InterruptedException {
-        String sql = "SELECT CodMuni,Nombre,Descripcion,CodProv FROM municipios";
+        String sql = "SELECT CodMuni,CodMuniAuto,Nombre,Descripcion,CodProv FROM municipios";
         String tipo = "municipios";
         ClientThread clientThread = new ClientThread(sql,tipo);
 
@@ -162,6 +171,7 @@ public class municipios extends AppCompatActivity {
         i.putExtra("nombre",obj.getNombre());
         i.putExtra("descripcion",obj.getDescripcion());
         i.putExtra("codmuni",obj.getCodMuni());
+        i.putExtra("codmuniauto",obj.getCodMuniAuto());
         i.putExtra("ubicacion","lista");
         startActivity(i);
     }

@@ -47,13 +47,13 @@ public class ClientThread implements Runnable {
             Class.forName("com.mysql.jdbc.Driver");
 
             //Aqui pondriamos la IP y puerto.
-            //sIP = "192.168.7.231";
-            sIP = "192.168.1.136";//casa
+            sIP = "192.168.7.231";
+            //sIP = "192.168.1.136";//casa
             sPuerto = "3306";
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "user1", "");
+            con = DriverManager.getConnection(url, "root", "");
 
             switch(tipo){
 
@@ -78,9 +78,10 @@ public class ClientThread implements Runnable {
                     while (rs.next()) {
                         ObjetoMunicipios mun = new ObjetoMunicipios();
                         mun.setCodMuni(rs.getInt(1));
-                        mun.setNombre(rs.getString(2));
-                        mun.setDescripcion(rs.getString(3));
-                        mun.setCodProv(rs.getInt(4));
+                        mun.setCodMuniAuto(rs.getInt(2));
+                        mun.setNombre(rs.getString(3));
+                        mun.setDescripcion(rs.getString(4));
+                        mun.setCodProv(rs.getInt(5));
                         arrayMun.add(mun);
                     }
                     break;

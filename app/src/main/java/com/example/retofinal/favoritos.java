@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
 
     private Spinner sp1;
     private ListView lt1;
+    private Button btnAtras;
     private ArrayList<ObjetoMunicipios> arrayMun;
     private ArrayList<ObjetoEspacios> arrayEsp;
     private ArrayList<String> nombresMun;
@@ -120,7 +122,7 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
 
     private ArrayList<ObjetoMunicipios> conectarMuni() throws InterruptedException {
 
-        String sql = "SELECT A.CodMuni,A.Nombre,A.Descripcion,A.CodProv FROM municipios A, favmun B WHERE A.CodMuni = B.CodMuni AND B.CodUsu="+ClientThread.codigousuario+"";
+        String sql = "SELECT A.CodMuni,A.CodMuniAuto,A.Nombre,A.Descripcion,A.CodProv FROM municipios A, favmun B WHERE A.CodMuniAuto = B.CodMuni AND B.CodUsu="+ClientThread.codigousuario+"";
         String tipo = "municipios";
         ClientThread clientThread = new ClientThread(sql,tipo);
 
@@ -162,6 +164,7 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
         i.putExtra("nombre",obj.getNombre());
         i.putExtra("descripcion",obj.getDescripcion());
         i.putExtra("codmuni",obj.getCodMuni());
+        i.putExtra("codmuniauto",obj.getCodMuniAuto());
         i.putExtra("ubicacion","fav");
         startActivity(i);
     }

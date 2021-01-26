@@ -32,14 +32,14 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     private static final int REQUEST_IMAGE_CAPTURE =1;
     private TextView tNombre,tDescripcion;
     private Button btnUbicacion,btnCamara,btnAtras;
-    private int CodUsu,CodMuni;
+    private int CodUsu,CodMuniAuto,CodMuni;
     private String nom,desc,imagenHash,ubicacion,existe,rutaImagen,cambio;
     private ImageView imagen1;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
     public static File foto;
     private Bitmap bit=null;
-    private ArrayList<ObjetoMunicipios> variable;
+    private ArrayList<ObjetoMunicipios> variable=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +55,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         cbFav.setOnCheckedChangeListener(this);
         nom = getIntent().getExtras().get("nombre").toString();
         desc = getIntent().getExtras().get("descripcion").toString();
+        CodMuniAuto = (Integer)getIntent().getExtras().get("codmuniauto");
         CodMuni = (Integer)getIntent().getExtras().get("codmuni");
         CodUsu = ClientThread.codigousuario;
         ubicacion=getIntent().getExtras().get("ubicacion").toString();
@@ -128,8 +129,8 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         return foto;
     }
     public void googleMaps(View view) throws InterruptedException {
-        String sql = "SELECT latitud,longitud FROM municipios WHERE  CodMuni=" + CodMuni + "";
-        String tipo = "ubicacion";
+        String sql = "SELECT latitud,longitud FROM municipios WHERE  CodMuniAuto=" + CodMuniAuto + "";
+        String tipo = "ubicacionMun";
         ClientThread clientThread = new ClientThread(sql, tipo);
         Thread thread = new Thread(clientThread);
         thread.start();
@@ -139,10 +140,10 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             variable = clientThread.getArrayMun();
         }
 
-        if (variable.get(0).getLatitud() == null || variable.get(0).getLongitud() == null  ){
+        if (variable.get(0).getLatitud().equals("") || variable.get(0).getLongitud().equals("")){
             Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
         }else {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLatitud() + "," + variable.get(0).getLongitud() + ""));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLongitud() + "," + variable.get(0).getLatitud() + ""));
             startActivity(intent);
         }
     }
@@ -182,7 +183,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         }
     }
     private String conectarComp() throws InterruptedException {
-        String sql = "SELECT Count(*) FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
+        String sql = "SELECT Count(*) FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuniAuto+"";
         String tipo = "comprobarFav";
         ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
@@ -196,7 +197,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     }
 
     private Bitmap conectarFoto() throws InterruptedException {
-        String sql = "SELECT foto FROM fotomun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
+        String sql = "SELECT foto FROM fotomun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuniAuto+"";
         String tipo = "comprobarFoto";
         ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
@@ -206,7 +207,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     }
 
     private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotomun (CodUsu,CodMuni,foto) VALUES ("+CodUsu+","+CodMuni+",?)";
+        String sql = "INSERT INTO fotomun (CodUsu,CodMuni,foto) VALUES ("+CodUsu+","+CodMuniAuto+",?)";
         String tipo = "foto";
         ClientThread clientThread = new ClientThread(sql,tipo);
         clientThread.setFoto(foto);
@@ -218,9 +219,9 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
     private void conectarFav(String tip) throws InterruptedException {
         String sql="";
         if(tip.equals("insertar")){
-            sql = "INSERT INTO favmun (CodUsu,CodMuni) VALUES ("+CodUsu+","+CodMuni+")";
+            sql = "INSERT INTO favmun (CodUsu,CodMuni) VALUES ("+CodUsu+","+CodMuniAuto+")";
         }else if(tip.equals("borrar")){
-            sql = "DELETE FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuni+"";
+            sql = "DELETE FROM favmun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuniAuto+"";
         }
         String tipo = "favorito";
         ClientThread clientThread = new ClientThread(sql,tipo);

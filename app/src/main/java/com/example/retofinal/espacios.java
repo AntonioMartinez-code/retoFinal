@@ -22,8 +22,9 @@ public class espacios extends AppCompatActivity {
     private Button btnBuscar,btnAtrasMun;
     private ListView listview;
     private Spinner spinner;
+    private String filtro;
     private ConnectivityManager connectivityManager = null;
-    private ArrayList<ObjetoEspacios> arrayEsp;
+    private ArrayList<ObjetoEspacios> arrayEsp,arrayEspP;
     private ArrayList<String> nombreEsp;
 
     @Override
@@ -38,12 +39,13 @@ public class espacios extends AppCompatActivity {
         listview = findViewById(R.id.listview);
 
         String[] opciones = {"Bizkaia", "Gipuzkoa", "Alava"};
-
+        filtro="";
         ArrayAdapter<String> adapterSp = new ArrayAdapter<String>(this, android.
                 R.layout.simple_spinner_item, opciones);
         spinner.setAdapter(adapterSp);
 
         arrayEsp = new ArrayList<ObjetoEspacios>();
+        arrayEspP = new ArrayList<ObjetoEspacios>();
         nombreEsp = new ArrayList<String>();
 
         conectarOnClick(null);
@@ -60,18 +62,22 @@ public class espacios extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView adapterView, View view,
                                     int i, long l) {
-                datos(arrayEsp.get(i));
+                if(filtro.equals("si")){
+                    datos(arrayEspP.get(i));
+                } else datos(arrayEsp.get(i));
             }
         });
     }
     public void buscar(View v){
         String selec = spinner.getSelectedItem().toString();
+        filtro="si";
         if (selec.equals("Bizkaia")) {
             nombreEsp.clear();
-
+            arrayEspP.clear();
             for(int x=0;x<arrayEsp.size();x++){
-                if(arrayEsp.get(x).getCodProv() == 1){
+                if(arrayEsp.get(x).getCodProv() == 48){
                     nombreEsp.add(arrayEsp.get(x).getNombre());
+                    arrayEspP.add(arrayEsp.get(x));
                 }
 
                 ArrayAdapter<String> adapterLV = new ArrayAdapter<String>
@@ -83,8 +89,9 @@ public class espacios extends AppCompatActivity {
         } else if (selec.equals("Gipuzkoa")) {
             nombreEsp.clear();
             for(int x=0;x<arrayEsp.size();x++){
-                if(arrayEsp.get(x).getCodProv() == 2){
+                if(arrayEsp.get(x).getCodProv() == 20){
                     nombreEsp.add(arrayEsp.get(x).getNombre());
+                    arrayEspP.add(arrayEsp.get(x));
                 }
 
                 ArrayAdapter<String> adapterLV = new ArrayAdapter<String>
@@ -96,8 +103,9 @@ public class espacios extends AppCompatActivity {
         } else if (selec.equals("Alava")) {
             nombreEsp.clear();
             for(int x=0;x<arrayEsp.size();x++){
-                if(arrayEsp.get(x).getCodProv() == 3){
+                if(arrayEsp.get(x).getCodProv() == 1){
                     nombreEsp.add(arrayEsp.get(x).getNombre());
+                    arrayEspP.add(arrayEsp.get(x));
                 }
 
                 ArrayAdapter<String> adapterLV = new ArrayAdapter<String>
@@ -129,7 +137,7 @@ public class espacios extends AppCompatActivity {
 
     private ArrayList<ObjetoEspacios> conectar() throws InterruptedException {
 
-        String sql = "SELECT A.CodEspacio, A.Nombre, A.Descripcion, A.Tipo, C.CodProv FROM espacios A,ubicaciones B, municipios C WHERE A.CodEspacio = B.CodEspacio AND B.CodMuni = C.CodMuni ";
+        String sql = "SELECT A.CodEspacio, A.Nombre, A.Descripcion, A.Tipo, C.CodProv FROM espacios A,ubicaciones B, municipios C WHERE A.CodEspacio = B.CodEspacio AND B.CodMuni = C.CodMuni";
         String tipo = "espacios";
         ClientThread clientThread = new ClientThread(sql,tipo);
 

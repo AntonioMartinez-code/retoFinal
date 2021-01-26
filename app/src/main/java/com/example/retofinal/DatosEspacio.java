@@ -145,7 +145,7 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         if (variable.get(0).getLatitud() == null || variable.get(0).getLongitud() == null  ){
             Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
         }else {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLatitud() + "," + variable.get(0).getLongitud() + ""));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLongitud() + "," + variable.get(0).getLatitud() + ""));
             startActivity(intent);
         }
     }
