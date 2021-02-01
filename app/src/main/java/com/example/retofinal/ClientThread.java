@@ -72,6 +72,10 @@ public class ClientThread implements Runnable {
                     st = con.prepareStatement(sql);
                     st.execute(sql);
                     break;
+                case "cambioContra":
+                    st = con.prepareStatement(sql);
+                    st.execute(sql);
+                    break;
                 case "municipios":
                     arrayMun.clear();
                     st = con.prepareStatement(sql);

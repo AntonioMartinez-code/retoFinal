@@ -31,19 +31,19 @@ public class login extends AppCompatActivity {
 
         overridePendingTransition(R.xml.slide_up,R.xml.slide_off);
 
-        /*tvOlvidarContrasena.setOnClickListener(new View.OnClickListener() {
+        tvOlvidarContrasena.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cambioVentana();
 
             }
-        });*/
+        });
     }
 
-    /*public void cambioVentana(){
+    public void cambioVentana(){
         Intent i = new Intent(this, olvidarContra.class);
         startActivity(i);
-    }*/
+    }
     public void logear(View v) throws NoSuchAlgorithmException {
         String usuario = etUsuario.getText().toString();
         String contrasena = etContrasena.getText().toString();
