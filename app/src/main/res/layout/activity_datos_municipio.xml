@@ -87,4 +87,31 @@
         app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toEndOf="@+id/tDescripcion"
         app:layout_constraintTop_toBottomOf="@+id/tNombre" />
+
+    <Button
+        android:id="@+id/btnCompartir"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="42dp"
+        android:onClick="CompartirTexto"
+        android:text="Compartir texto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.339"
+        app:layout_constraintStart_toEndOf="@+id/tDescripcion"
+        app:layout_constraintTop_toBottomOf="@+id/button5" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="7dp"
+        android:onClick="compartirFoto"
+        android:text="Compartir foto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tDescripcion"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
