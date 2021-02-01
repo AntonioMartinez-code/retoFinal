@@ -28,7 +28,7 @@ public class galeriaMun extends AppCompatActivity {
         private ImageView imagen1, imagen2, imagen3, imagen4;
         private Button btnCamara;
         public File foto;
-        private String rutaImagen, nom, desc, ubicacion;
+        private String rutaImagen =  null, nom, desc, ubicacion;
         private ConnectivityManager connectivityManager = null;
         private int CodUsu, CodMuniAuto,CodMuni;
         private ArrayList<Bitmap> bit = null;
@@ -74,13 +74,33 @@ public class galeriaMun extends AppCompatActivity {
             }
         }
 
-        public void tomarFotoMun(View v) {
+    public void compartirFoto(View v) {
+        try{
+            if (rutaImagen == null) {
+                Toast.makeText(getApplicationContext(), "no hay foto", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, rutaImagen);
+                shareIntent.setType("image/jpeg");
+                startActivity(Intent.createChooser(shareIntent, "foto"));
+            }
+        }catch (Exception ex ){
+            Toast.makeText(getApplicationContext(), "error al compartir foto", Toast.LENGTH_SHORT).show();
+
+        }
+
+
+    }
+
+    public void tomarFotoMun(View v) {
             Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             File imagenArchivo = null;
 
             try {
                 imagenArchivo = crearImagen();
+
             } catch (IOException e) {
                 Log.e("error", e.toString());
             }

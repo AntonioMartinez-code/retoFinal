@@ -35,7 +35,7 @@
         <activity android:name=".DatosEspacio" />
         <activity android:name=".DatosMunicipio" />
         <activity android:name=".login" /> <!-- activity android:name=".conexion"/ -->
-        <activity android:name=".datosMunicipios" />
+
         <activity android:name=".favoritos" />
         <activity android:name=".topEspacios" />
         <activity android:name=".topMunicipios" />

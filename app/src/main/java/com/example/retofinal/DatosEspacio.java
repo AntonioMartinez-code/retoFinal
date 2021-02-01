@@ -176,6 +176,16 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         }
         return ret;
     }
+    public void CompartirTexto(View v){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, tDescripcion.getText());
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+
+    }
 
     public void atras(View v){
         if(ubicacion.equals("lista")){

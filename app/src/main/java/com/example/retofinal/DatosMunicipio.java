@@ -93,24 +93,6 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         startActivity(shareIntent);
 
     }
-    public void compartirFoto(View v) {
-        try{
-            if (rutaImagen == null) {
-                Toast.makeText(getApplicationContext(), "no hay foto", Toast.LENGTH_SHORT).show();
-            } else {
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, rutaImagen);
-                shareIntent.setType("image/jpeg");
-                startActivity(Intent.createChooser(shareIntent, null));
-            }
-        }catch (Exception ex ){
-            Toast.makeText(getApplicationContext(), "error al compartir foto", Toast.LENGTH_SHORT).show();
-
-        }
-
-
-    }
 
     public void tomarFoto(View v) {
 

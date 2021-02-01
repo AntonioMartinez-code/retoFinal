@@ -88,4 +88,17 @@
         app:layout_constraintStart_toEndOf="@+id/tDescripcion"
         app:layout_constraintTop_toBottomOf="@+id/tNombre" />
 
+    <Button
+        android:id="@+id/btncompartirTexto"
+        android:layout_width="135dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="CompartirTexto"
+        android:text="compartir texto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tDescripcion"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
