@@ -3,6 +3,7 @@ package com.example.retofinal;
 public class ObjetoMunicipios {
 
     private int CodMuni;
+    private int CodMuniAuto;
     private String Nombre;
     private String Descripcion;
     private int CodProv;
@@ -10,6 +11,14 @@ public class ObjetoMunicipios {
     private String longitud;
     public ObjetoMunicipios() {
 
+    }
+
+    public int getCodMuniAuto() {
+        return CodMuniAuto;
+    }
+
+    public void setCodMuniAuto(int codMuniAuto) {
+        CodMuniAuto = codMuniAuto;
     }
 
     public String getLatitud() {
