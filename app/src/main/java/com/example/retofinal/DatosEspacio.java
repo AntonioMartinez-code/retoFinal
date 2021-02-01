@@ -70,13 +70,13 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
             cbFav.setChecked(false);
         }
 
-        conectarOnClick("foto");
+        /*conectarOnClick("foto");
         if(bit != null){
             btnCamara.setEnabled(false);
             imagen1.setImageBitmap(bit);
         } else{
             btnCamara.setEnabled(true);
-        }
+        }*/
     }
 
     @Override
@@ -91,19 +91,17 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         }
     }
 
-    public void atras(View v){
-        if(ubicacion.equals("lista")){
-            Intent i = new Intent(this, espacios.class);
-            startActivity(i);
-        }else{
-            Intent i = new Intent(this, favoritos.class);
-            startActivity(i);
-        }
-
-    }
-
     public void tomarFoto(View v){
-        Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Intent i = new Intent(this, galeria.class);
+        i.putExtra("codusu",CodUsu);
+        i.putExtra("codesp",CodEspacio);
+        i.putExtra("nombre",nom);
+        i.putExtra("descripcion",desc);
+        i.putExtra("ubicacion",ubicacion);
+        startActivity(i);
+
+        /*Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         File imagenArchivo = null;
 
@@ -117,12 +115,12 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
             Uri fotoUri= FileProvider.getUriForFile(this,"com.example.retofinal.fileprovider",imagenArchivo);
             intento1.putExtra(MediaStore.EXTRA_OUTPUT,fotoUri);
             startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
-        }
+        }*/
 
 
     }
 
-    public File crearImagen() throws IOException {
+    /*public File crearImagen() throws IOException {
         String nombreFoto ="foto_";
         File directorio = getExternalFilesDir(null);
         foto = File.createTempFile(nombreFoto,".jpg",directorio);
@@ -130,6 +128,40 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
 
         return foto;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            //Bundle ex = data.getExtras();
+            Bitmap imageBit = BitmapFactory.decodeFile(rutaImagen);
+            imagen1.setImageBitmap(imageBit);
+
+            conectarOnClick("");
+        }
+    }
+
+    private Bitmap conectarFoto() throws InterruptedException {
+        String sql = "SELECT foto FROM fotoesp WHERE CodUsu="+CodUsu+" AND CodEspacio="+CodEspacio+"";
+        String tipo = "comprobarFoto";
+        ClientThread clientThread = new ClientThread(sql,tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+        return clientThread.getImage();
+    }
+
+    private void conectar() throws InterruptedException {
+        String sql = "INSERT INTO fotoesp (CodUsu,CodEspacio,foto) VALUES ("+CodUsu+","+CodEspacio+",?)";
+        String tipo = "foto";
+        ClientThread clientThread = new ClientThread(sql,tipo);
+        clientThread.setFoto(foto);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+
+    }*/
+
     public void googleMaps(View view) throws InterruptedException {
         String sql = "SELECT latitud,longitud FROM espacios WHERE  CodEspacio=" + CodEspacio + "";
         String tipo = "ubicacionEsp";
@@ -150,28 +182,16 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            //Bundle ex = data.getExtras();
-            Bitmap imageBit = BitmapFactory.decodeFile(rutaImagen);
-            imagen1.setImageBitmap(imageBit);
-
-            conectarOnClick("");
-        }
-    }
-
     public void conectarOnClick(String tipo) {
         try {
 
             if (isConnected()) {
                 if(tipo.equals("")) {
-                    conectar();
+                   // conectar();
                 }else if(tipo.equals("comprobar")){
                     existe = conectarComp();
                 }else if(tipo.equals("foto")){
-                    bit = conectarFoto();
+                   // bit = conectarFoto();
                 }  else{
                     Log.i("FFF",tipo);
                     conectarFav(tipo);
@@ -199,27 +219,6 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         return clientThread.getResponse();
     }
 
-    private Bitmap conectarFoto() throws InterruptedException {
-        String sql = "SELECT foto FROM fotoesp WHERE CodUsu="+CodUsu+" AND CodEspacio="+CodEspacio+"";
-        String tipo = "comprobarFoto";
-        ClientThread clientThread = new ClientThread(sql,tipo);
-        Thread thread = new Thread(clientThread);
-        thread.start();
-        thread.join();
-        return clientThread.getImage();
-    }
-
-    private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotoesp (CodUsu,CodEspacio,foto) VALUES ("+CodUsu+","+CodEspacio+",?)";
-        String tipo = "foto";
-        ClientThread clientThread = new ClientThread(sql,tipo);
-        clientThread.setFoto(foto);
-        Thread thread = new Thread(clientThread);
-        thread.start();
-        thread.join();
-
-    }
-
     private void conectarFav(String tip) throws InterruptedException {
         String sql="";
         if(tip.equals("insertar")){
@@ -245,6 +244,17 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
             Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
         }
         return ret;
+    }
+
+    public void atras(View v){
+        if(ubicacion.equals("lista")){
+            Intent i = new Intent(this, espacios.class);
+            startActivity(i);
+        }else{
+            Intent i = new Intent(this, favoritos.class);
+            startActivity(i);
+        }
+
     }
 
 }
