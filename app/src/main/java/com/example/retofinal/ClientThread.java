@@ -19,6 +19,7 @@ public class ClientThread implements Runnable {
     private String sql;
     private String tipo;
     private Bitmap imagen;
+    private ArrayList<Bitmap> imagenArray = new ArrayList<Bitmap>();
     private ArrayList<ObjetoMunicipios> arrayMun = new ArrayList<ObjetoMunicipios>();
     private ArrayList<ObjetoEspacios> arrayEsp = new ArrayList<ObjetoEspacios>();
     public static int codigousuario;
@@ -47,8 +48,8 @@ public class ClientThread implements Runnable {
             Class.forName("com.mysql.jdbc.Driver");
 
             //Aqui pondriamos la IP y puerto.
-            //sIP = "192.168.7.231";
-            sIP= "192.168.7.223";//clase antonio
+            sIP = "192.168.7.231";
+            //sIP= "192.168.7.223";//clase antonio
             //sIP = "192.168.1.136";//casa
             sPuerto = "3306";
             sBBDD = "retofinal";
@@ -155,12 +156,13 @@ public class ClientThread implements Runnable {
                 case "comprobarFoto":
                     st = con.prepareStatement(sql);
                     rs = st.executeQuery();
+                    imagenArray.clear();
                     while (rs.next()) {
                         Blob var1 = rs.getBlob(1);
                         int blobLength = (int) var1.length();
                         byte[] blobByte = var1.getBytes(1,blobLength);
                         imagen = BitmapFactory.decodeByteArray(blobByte,0,blobByte.length);
-
+                        imagenArray.add(imagen);
                     }
                     break;
             }
@@ -201,6 +203,11 @@ public class ClientThread implements Runnable {
     public Bitmap getImage() {
 
         return imagen;
+    }
+
+    public ArrayList<Bitmap> getImageArray() {
+
+        return imagenArray;
     }
 
     public ArrayList<ObjetoMunicipios> getArrayMun() {

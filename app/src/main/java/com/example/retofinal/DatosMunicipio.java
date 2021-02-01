@@ -70,13 +70,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         }else {
             cbFav.setChecked(false);
         }
-        conectarOnClick("foto");
-        if(bit != null){
-            btnCamara.setEnabled(false);
-            imagen1.setImageBitmap(bit);
-        } else{
-            btnCamara.setEnabled(true);
-        }
+
     }
 
     @Override
@@ -117,44 +111,20 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
 
 
     }
-    public void atras(View v){
-        if(ubicacion.equals("lista")){
-            Intent i = new Intent(this, municipios.class);
-            startActivity(i);
-        }else{
-            Intent i = new Intent(this, favoritos.class);
-            startActivity(i);
-        }
-    }
 
-    public void tomarFoto(View v){
-        Intent intento1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    public void tomarFoto(View v) {
 
-        File imagenArchivo = null;
-
-        try{
-            imagenArchivo = crearImagen();
-        } catch (IOException e) {
-            Log.e("error",e.toString());
-        }
-
-        if(imagenArchivo!=null){
-            Uri fotoUri= FileProvider.getUriForFile(this,"com.example.retofinal.fileprovider",imagenArchivo);
-            intento1.putExtra(MediaStore.EXTRA_OUTPUT,fotoUri);
-            startActivityForResult(intento1, REQUEST_IMAGE_CAPTURE);
-        }
-
+        Intent i = new Intent(this, galeriaMun.class);
+        i.putExtra("codusu", CodUsu);
+        i.putExtra("codmun", CodMuni);
+        i.putExtra("codmuniauto", CodMuniAuto);
+        i.putExtra("nombre", nom);
+        i.putExtra("descripcion", desc);
+        i.putExtra("ubicacion", ubicacion);
+        startActivity(i);
 
     }
 
-    public File crearImagen() throws IOException {
-        String nombreFoto ="foto_";
-        File directorio = getExternalFilesDir(null);
-        foto = File.createTempFile(nombreFoto,".jpg",directorio);
-        rutaImagen = foto.getAbsolutePath();
-
-        return foto;
-    }
     public void googleMaps(View view) throws InterruptedException {
         String sql = "SELECT latitud,longitud FROM municipios WHERE  CodMuniAuto=" + CodMuniAuto + "";
         String tipo = "ubicacionMun";
@@ -167,22 +137,11 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             variable = clientThread.getArrayMun();
         }
 
-        if (variable.get(0).getLatitud().equals("") || variable.get(0).getLongitud().equals("")){
+        if (variable.get(0).getLatitud().equals("") || variable.get(0).getLongitud().equals("")) {
             Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
-        }else {
+        } else {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLongitud() + "," + variable.get(0).getLatitud() + ""));
             startActivity(intent);
-        }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            //Bundle ex = data.getExtras();
-            Bitmap imageBit = BitmapFactory.decodeFile(rutaImagen);
-            imagen1.setImageBitmap(imageBit);
-
-            conectarOnClick("");
         }
     }
 
@@ -191,11 +150,9 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
 
             if (isConnected()) {
                 if(tipo.equals("")) {
-                    conectar();
+                    //conectar();
                 }else if(tipo.equals("comprobar")){
                         existe = conectarComp();
-                }else if(tipo.equals("foto")){
-                    bit = conectarFoto();
                 }  else{
                     Log.i("FFF",tipo);
                     conectarFav(tipo);
@@ -223,26 +180,6 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         return clientThread.getResponse();
     }
 
-    private Bitmap conectarFoto() throws InterruptedException {
-        String sql = "SELECT foto FROM fotomun WHERE CodUsu="+CodUsu+" AND CodMuni="+CodMuniAuto+"";
-        String tipo = "comprobarFoto";
-        ClientThread clientThread = new ClientThread(sql,tipo);
-        Thread thread = new Thread(clientThread);
-        thread.start();
-        thread.join();
-        return clientThread.getImage();
-    }
-
-    private void conectar() throws InterruptedException {
-        String sql = "INSERT INTO fotomun (CodUsu,CodMuni,foto) VALUES ("+CodUsu+","+CodMuniAuto+",?)";
-        String tipo = "foto";
-        ClientThread clientThread = new ClientThread(sql,tipo);
-        clientThread.setFoto(foto);
-        Thread thread = new Thread(clientThread);
-        thread.start();
-        thread.join();
-    }
-
     private void conectarFav(String tip) throws InterruptedException {
         String sql="";
         if(tip.equals("insertar")){
@@ -268,5 +205,15 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
         }
         return ret;
+    }
+
+    public void atras(View v){
+        if(ubicacion.equals("lista")){
+            Intent i = new Intent(this, municipios.class);
+            startActivity(i);
+        }else{
+            Intent i = new Intent(this, favoritos.class);
+            startActivity(i);
+        }
     }
 }
