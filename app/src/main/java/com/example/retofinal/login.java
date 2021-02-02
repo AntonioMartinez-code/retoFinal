@@ -64,6 +64,17 @@ public class login extends AppCompatActivity {
                 } else {
 
                     contrasenaP = sRespuesta;
+                    if (!usuario.equals("") && !contrasena.equals("")) {
+                        if (hash.equals(contrasenaP)) {
+                            Toast.makeText(this, "login correcto", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(this, menu_principal.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(this, "error al logear", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(this, "debe rellenar los campos", Toast.LENGTH_LONG).show();
+                    }
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "ERROR_NO_INTERNET", Toast.LENGTH_SHORT).show();
@@ -72,17 +83,7 @@ public class login extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "ERROR_GENERAL", Toast.LENGTH_SHORT).show();
         }
 
-        if (!usuario.equals("") && !contrasena.equals("")) {
-            if (hash.equals(contrasenaP)) {
-                Toast.makeText(this, "login correcto", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, menu_principal.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, "error al logear", Toast.LENGTH_LONG).show();
-            }
-        }else{
-            Toast.makeText(this, "debe rellenar los campos", Toast.LENGTH_LONG).show();
-        }
+
 
     }
     public void VRegistro(View view) {
@@ -91,6 +92,7 @@ public class login extends AppCompatActivity {
     }
 
     private String conectar() throws InterruptedException {
+
         String sql = "SELECT CodUsu,Password FROM usuarios WHERE Nombre='"+ etUsuario.getText()  +"'";
         String tipo = "login";
         ClientThread clientThread = new ClientThread(sql,tipo);
@@ -98,12 +100,10 @@ public class login extends AppCompatActivity {
         Thread thread = new Thread(clientThread);
         thread.start();
         thread.join();
-        String variable = null;
+
         // Esperar respusta del servidor...
-        while (variable == null) {
-            variable = clientThread.getResponse();
-        }
-        Log.i("log : metodo Conectar ", variable);
+
+       // Log.i("log : metodo Conectar ", variable);
         return clientThread.getResponse();
     }
 
