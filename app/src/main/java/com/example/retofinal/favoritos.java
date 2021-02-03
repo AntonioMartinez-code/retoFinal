@@ -70,7 +70,6 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
         nombresMun.clear();
         nombresEsp.clear();
         String selected = sp1.getSelectedItem().toString();
-        Log.i("selected",selected);
         conectarOnClick(selected);
         if(selected.equals("Municipios")){
 
