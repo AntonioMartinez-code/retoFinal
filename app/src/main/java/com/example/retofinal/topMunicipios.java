@@ -14,6 +14,6 @@ public class topMunicipios extends AppCompatActivity {
     }
 
     public void consulta(){
-        
+        String sql = "Select ";
     }
 }
