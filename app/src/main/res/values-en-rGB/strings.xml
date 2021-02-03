@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">retoFinal</string>
+    <string name="btnIniciar">Start</string>
+    <string name="imgSol">sun</string>
+    <string name="btnEntrarLogin">Enter</string>
+    <string name="TextviewUsuarioLogin">User</string>
+    <string name="TextviewContraseñaLogin">Password</string>
+    <string name="TextviewOlvidar">Forgot Password?</string>
+    <string name="btnRegistrar">Register</string>
+    <string name="TituloRegistro">Register</string>
+    <string name="Bienvenido">Welcome!</string>
+    <string name="Favorito">Favourite</string>
+    <string name="btnCompartirTexto">Share text</string>
+    <string name="btnAtras">Back</string>
+    <string name="btnUbicacion">Location</string>
+    <string name="btnGaleria">Gallery</string>
+    <string name="TituloEspacios">Natural Spaces</string>
+    <string name="Buscar">Search</string>
+    <string name="titulofavoritos">Favourites</string>
+    <string name="btnCamara">Camera</string>
+    <string name="CompartirFoto">Share photos</string>
+    <string name="TituloMenu">Main Menu</string>
+    <string name="Municipios">municipalities</string>
+    <string name="Topmunicipios">Top ranking municipalities</string>
+    <string name="TopEspacios">Top ranking natural spaces</string>
+    <string name="OlvidarContraseña">Forgot Password</string>
+    <string name="NombreUsuario">User name</string>
+    <string name="ContraseñaNueva">New password</string>
+    <string name="RepiteContra">Repeat Password</string>
+    <string name="Cancelar">Cancel</string>
+    <string name="TopMuniciosTitulo">top 5 municipalities</string>
+</resources>
