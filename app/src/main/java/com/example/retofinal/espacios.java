@@ -137,7 +137,7 @@ public class espacios extends AppCompatActivity {
 
     private ArrayList<ObjetoEspacios> conectar() throws InterruptedException {
 
-        String sql = "SELECT A.CodEspacio, A.Nombre, A.Descripcion, A.Tipo, C.CodProv FROM espacios A,ubicaciones B, municipios C WHERE A.CodEspacio = B.CodEspacio AND B.CodMuni = C.CodMuni";
+        String sql = "SELECT A.CodEspacio, A.Nombre, A.Descripcion, A.Tipo, C.CodProv FROM espacios A,ubicaciones B, municipios C WHERE A.CodEspacio = B.CodEspacio AND C.CodMuniAuto = B.CodMuniAuto";
         String tipo = "espacios";
         ClientThread clientThread = new ClientThread(sql,tipo);
 

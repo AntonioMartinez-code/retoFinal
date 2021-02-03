@@ -40,4 +40,5 @@
     <string name="contraseñasnocoinciden">Las contraseñas no coinciden</string>
     <string name="erroralcambiarcontra">Error al cambiar contraseña</string>
     <string name="usuarioregistrado">Usuario registrado con exito</string>
+
 </resources>
