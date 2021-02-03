@@ -41,7 +41,8 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
         arrayMun = new ArrayList<ObjetoMunicipios>();
         nombresMun = new ArrayList<String>();
         nombresEsp = new ArrayList<String>();
-        String[] opciones = {"Municipios","Espacios Naturales"};
+
+        String[] opciones = {"Municipios", "Espacios Naturales"};
 
         ArrayAdapter<String> adapterSp = new ArrayAdapter<String>(this, android.
                 R.layout.simple_spinner_item, opciones);
