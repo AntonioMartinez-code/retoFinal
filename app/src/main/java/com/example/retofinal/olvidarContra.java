@@ -51,17 +51,17 @@ public class olvidarContra extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "ERROR_GENERAL", Toast.LENGTH_SHORT).show();
                     }
 
-                    Toast.makeText(this, "contraseña actualizada con exito", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.contraseñaActualizada, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(this, login.class);
                     startActivity(intent);
 
 
                 } else {
 
-                    Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.contraseñasnocoinciden, Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(this, "hay campos vacios debe rellenarlos", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.rellenarcampos, Toast.LENGTH_LONG).show();
             }
         }
         public void Vatras(View view) {
@@ -78,7 +78,7 @@ public class olvidarContra extends AppCompatActivity {
                 thread.start();
                 thread.join();
             }catch(Exception e){
-                Toast.makeText(this, "error al cambiar contraseña", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.erroralcambiarcontra, Toast.LENGTH_LONG).show();
             }
 
         }
@@ -92,7 +92,7 @@ public class olvidarContra extends AppCompatActivity {
                 if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
                     ret = true;
             } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
             }
             return ret;
         }

@@ -120,7 +120,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         }
 
         if (variable.get(0).getLatitud().equals("") || variable.get(0).getLongitud().equals("")) {
-            Toast.makeText(this, "no se puede mostrar la ubicacion", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.nosepuedemostrarub, Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("geo:" + variable.get(0).getLongitud() + "," + variable.get(0).getLatitud() + ""));
             startActivity(intent);
@@ -184,7 +184,7 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
                 ret = true;
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
         }
         return ret;
     }
