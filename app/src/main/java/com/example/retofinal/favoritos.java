@@ -108,7 +108,7 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
                 }
 
                 if (null == arrayMun) { // Si la respuesta es null, una excepción ha ocurrido.
-                    Toast.makeText(getApplicationContext(), "ERROR_COMUNICACION", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
                 }
 
             } else {
@@ -154,7 +154,7 @@ public class favoritos extends AppCompatActivity implements AdapterView.OnItemSe
             if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
                 ret = true;
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
         }
         return ret;
     }

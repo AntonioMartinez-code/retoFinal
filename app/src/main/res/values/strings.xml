@@ -29,4 +29,15 @@
     <string name="RepiteContra">Repite contraseña</string>
     <string name="Cancelar">Cancelar</string>
     <string name="TopMuniciosTitulo">Top 5 Municipios</string>
+    <string name="ErrorComunicacion">Error Comunicacion</string>
+    <string name="loginCorrecto">Login correcto</string>
+    <string name="errorlogin">Error al logear</string>
+    <string name="rellenarcampos">Debe rellenar los campos</string>
+    <string name="nosepuedemostrarub">No se puede mostrar la ubicacion</string>
+    <string name="nohayfoto">No hay Foto</string>
+    <string name="errorCompartirFoto">Error compartir foto</string>
+    <string name="contraseñaActualizada">Contraseña actualizada con exito</string>
+    <string name="contraseñasnocoinciden">Las contraseñas no coinciden</string>
+    <string name="erroralcambiarcontra">Error al cambiar contraseña</string>
+    <string name="usuarioregistrado">Usuario registrado con exito</string>
 </resources>

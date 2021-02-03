@@ -60,20 +60,20 @@ public class login extends AppCompatActivity {
             if (isConnected()) {
                 String sRespuesta = conectar();
                 if (null == sRespuesta) { // Si la respuesta es null, una excepción ha ocurrido.
-                    Toast.makeText(getApplicationContext(), "ERROR_COMUNICACION", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
                 } else {
 
                     contrasenaP = sRespuesta;
                     if (!usuario.equals("") && !contrasena.equals("")) {
                         if (hash.equals(contrasenaP)) {
-                            Toast.makeText(this, "login correcto", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, R.string.loginCorrecto, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(this, menu_principal.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(this, "error al logear", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, R.string.errorlogin, Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        Toast.makeText(this, "debe rellenar los campos", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.rellenarcampos, Toast.LENGTH_LONG).show();
                     }
                 }
             } else {
@@ -115,7 +115,7 @@ public class login extends AppCompatActivity {
             if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
                 ret = true;
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
         }
         return ret;
     }

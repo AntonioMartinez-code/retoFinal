@@ -30,4 +30,15 @@
     <string name="RepiteContra">Repeat Password</string>
     <string name="Cancelar">Cancel</string>
     <string name="TopMuniciosTitulo">top 5 municipalities</string>
+    <string name="ErrorComunicacion">Error Comunication</string>
+    <string name="loginCorrecto">correct login</string>
+    <string name="errorlogin">Error login</string>
+    <string name="rellenarcampos">you must fill in the fields</string>
+    <string name="nosepuedemostrarub">the location cannot be displayed</string>
+    <string name="nohayfoto">no picture</string>
+    <string name="errorCompartirFoto">photo sharing error</string>
+    <string name="contraseñaActualizada">Password updated successfully</string>
+    <string name="contraseñasnocoinciden">Passwords do not match</string>
+    <string name="erroralcambiarcontra">error when changing password</string>
+    <string name="usuarioregistrado">Registered user successfully</string>
 </resources>

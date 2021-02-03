@@ -32,7 +32,7 @@ public class registro extends AppCompatActivity {
         String usuario = etUsuario.getText().toString();
         String contrasena = etContrasena.getText().toString();
         String repite = etRepite.getText().toString();
-        String clave = "123";
+
 
         if (!usuario.equals("") && !contrasena.equals("") && !repite.equals("")) {
             if (contrasena.equals(repite)) {
@@ -56,17 +56,17 @@ public class registro extends AppCompatActivity {
                 /*editor.putString("contrasena", hash);
                     editor.commit();
                     finish();*/
-                    Toast.makeText(this, "Usuario registrado con exito", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.usuarioregistrado, Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(this, login.class);
                     startActivity(intent);
 
 
             } else {
 
-                Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.contraseñasnocoinciden, Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(this, "hay campos vacios debe rellenarlos", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.rellenarcampos, Toast.LENGTH_LONG).show();
         }
     }
     public void VCancelar(View view) {
@@ -93,7 +93,7 @@ public class registro extends AppCompatActivity {
             if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
                 ret = true;
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
         }
         return ret;
     }

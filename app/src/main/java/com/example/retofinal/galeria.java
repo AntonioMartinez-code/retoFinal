@@ -75,7 +75,7 @@ public class galeria extends AppCompatActivity {
     public void compartirFoto(View v) {
         try{
             if (rutaImagen == null) {
-                Toast.makeText(getApplicationContext(), "no hay foto", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.nohayfoto, Toast.LENGTH_SHORT).show();
             } else {
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
@@ -84,7 +84,7 @@ public class galeria extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, null));
             }
         }catch (Exception ex ){
-            Toast.makeText(getApplicationContext(), "error al compartir foto", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.errorCompartirFoto, Toast.LENGTH_SHORT).show();
 
         }
 
@@ -194,7 +194,7 @@ public class galeria extends AppCompatActivity {
             if ((networkInfo != null) && (networkInfo.isAvailable()) && (networkInfo.isConnected()))
                 ret = true;
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error_comunicación", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.ErrorComunicacion, Toast.LENGTH_SHORT).show();
         }
         return ret;
     }
