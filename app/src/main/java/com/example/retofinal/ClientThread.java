@@ -180,7 +180,7 @@ public class ClientThread implements Runnable {
                     array.clear();
                     int i=0;
                     while (rs.next()) {
-                        i ++;
+                        i = i + 1;
                         array.add(rs.getString(i));
                     }
                     break;

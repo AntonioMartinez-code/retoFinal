@@ -64,6 +64,7 @@
         android:layout_marginTop="40dp"
         android:onClick="tomarFoto"
         android:text="@string/btnCamara"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -75,6 +76,7 @@
         android:layout_marginTop="16dp"
         android:onClick="atras"
         android:text="@string/btnAtras"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnCompartirfoto"
         app:layout_constraintTop_toBottomOf="@+id/button4" />
@@ -86,6 +88,7 @@
         android:layout_marginStart="56dp"
         android:layout_marginTop="16dp"
         android:onClick="compartirFoto"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         android:text="@string/CompartirFoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button4" />

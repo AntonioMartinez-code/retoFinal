@@ -41,4 +41,6 @@
     <string name="contraseñasnocoinciden">Passwords do not match</string>
     <string name="erroralcambiarcontra">error when changing password</string>
     <string name="usuarioregistrado">Registered user successfully</string>
+    <string name="top5municipios">Top 5 Municipalities</string>
+    <string name="top5espacios">Top 5 Spaces</string>
 </resources>

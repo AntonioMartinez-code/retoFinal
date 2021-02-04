@@ -1,5 +1,6 @@
 package com.example.retofinal;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.Spinner;
@@ -18,9 +20,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class datosMetereologicos extends AppCompatActivity {
+public class datosMetereologicos extends AppCompatActivity implements CalendarView.OnDateChangeListener {
 
-    private String rutaImagen =  null, nom, desc, ubicacion;
+    private String fecha, nom, desc, ubicacion;
     private ConnectivityManager connectivityManager = null;
     private int CodUsu, CodMuniAuto,CodMuni;
     private Spinner spinner, spinnerH;
@@ -37,6 +39,7 @@ public class datosMetereologicos extends AppCompatActivity {
         spinner = findViewById(R.id.spinner4);
         spinnerH = findViewById(R.id.spinner5);
         calendar = findViewById(R.id.calendarView2);
+        calendar.setOnDateChangeListener(this);
         tvDatos = findViewById(R.id.textView10);
 
 
@@ -47,7 +50,11 @@ public class datosMetereologicos extends AppCompatActivity {
         desc = getIntent().getExtras().get("descripcion").toString();
         ubicacion = getIntent().getExtras().get("ubicacion").toString();
 
-        String[] opciones = DatosMunicipio.arrayEstaciones.toArray(new String[0]);
+        String[] opciones = new String[5];
+        for (int i=0;i<DatosMunicipio.arrayEstaciones.size();i++){
+            opciones[i] = DatosMunicipio.arrayEstaciones.get(i);
+        }
+
         ArrayAdapter<String> adapterSp = new ArrayAdapter<String>(this, android.
                 R.layout.simple_spinner_item, opciones);
         spinner.setAdapter(adapterSp);
@@ -61,7 +68,7 @@ public class datosMetereologicos extends AppCompatActivity {
 
     private ArrayList<String> conectar() throws InterruptedException {
         Log.i("fecha",String.valueOf(calendar.getDate()));
-        String sql = "SELECT COmgm3, NOgm3, NO2, PM10, ICAESTACION FROM Datos WHERE Fecha = "+calendar.getDate()+" AND Hora = "+spinnerH.getSelectedItem().toString()+" AND CodEst = (SELECT CodEst FROM Estaciones WHERE Nombre ='"+spinner.getSelectedItem().toString()+"')";
+        String sql = "SELECT COmgm3, NOgm3, NO2, PM10, ICAESTACION FROM Datos WHERE Fecha = "+fecha+" AND Hora = "+spinnerH.getSelectedItem().toString()+" AND CodEst = (SELECT CodEst FROM Estaciones WHERE Nombre ='"+spinner.getSelectedItem().toString()+"')";
         String tipo = "datos";
         ClientThread clientThread = new ClientThread(sql,tipo);
         Thread thread = new Thread(clientThread);
@@ -115,5 +122,11 @@ public class datosMetereologicos extends AppCompatActivity {
         i.putExtra("codmuni",CodMuni);
         startActivity(i);
 
+    }
+
+    @Override
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+
+        fecha = year +"-"+ month +"-"+ dayOfMonth;
     }
 }

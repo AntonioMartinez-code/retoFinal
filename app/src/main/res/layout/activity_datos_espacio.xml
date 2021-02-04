@@ -38,7 +38,7 @@
         android:contentDescription="@string/btnGaleria"
         android:onClick="tomarFoto"
         android:text="@string/btnGaleria"
-        app:background="@drawable/camara"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tDescripcion" />
 
@@ -51,7 +51,7 @@
         android:contentDescription="@string/btnUbicacion"
         android:onClick="googleMaps"
         android:text="@string/btnUbicacion"
-        app:background="@drawable/ubicacion"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintStart_toEndOf="@+id/btnCamara"
         app:layout_constraintTop_toBottomOf="@+id/tDescripcion" />
 
@@ -76,6 +76,7 @@
         android:layout_marginTop="32dp"
         android:contentDescription="@string/Favorito"
         android:text="@string/Favorito"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toEndOf="@+id/tDescripcion"
@@ -91,6 +92,7 @@
         android:contentDescription="@string/btnCompartirTexto"
         android:onClick="CompartirTexto"
         android:text="@string/btnCompartirTexto"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/tDescripcion"

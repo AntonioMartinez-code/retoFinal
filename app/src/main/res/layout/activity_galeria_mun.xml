@@ -68,6 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintTop_toBottomOf="@+id/imageView10"
         tools:ignore="OnClick" />
 
@@ -79,6 +80,7 @@
         android:onClick="atrasMunicipio"
         android:text="@string/btnAtras"
         app:layout_constraintEnd_toEndOf="parent"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintStart_toEndOf="@+id/btncompartirfoto"
         app:layout_constraintTop_toBottomOf="@+id/button6" />
 
@@ -91,6 +93,7 @@
         android:layout_marginEnd="64dp"
         android:onClick="compartirFoto"
         android:text="@string/CompartirFoto"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintEnd_toStartOf="@+id/button7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button6" />

@@ -40,5 +40,8 @@
     <string name="contraseñasnocoinciden">Las contraseñas no coinciden</string>
     <string name="erroralcambiarcontra">Error al cambiar contraseña</string>
     <string name="usuarioregistrado">Usuario registrado con exito</string>
+    <string name="top5municipios">Top 5 Municipios</string>
+    <string name="top5espacios">Top 5 Espacios</string>
+
 
 </resources>

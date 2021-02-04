@@ -45,6 +45,7 @@
         android:layout_marginTop="20dp"
         android:onClick="atras"
         android:text="@string/btnAtras"
+        app:backgroundTint="@color/material_on_background_emphasis_high_type"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.919"
         app:layout_constraintStart_toStartOf="parent"
