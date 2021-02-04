@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RetoFinal">
-        <activity android:name=".galeriaMun"></activity>
+        <activity android:name=".datosMetereologicos"></activity>
+        <activity android:name=".galeriaMun" />
         <activity android:name=".galeria" />
 
         <meta-data
@@ -35,7 +36,6 @@
         <activity android:name=".DatosEspacio" />
         <activity android:name=".DatosMunicipio" />
         <activity android:name=".login" /> <!-- activity android:name=".conexion"/ -->
-
         <activity android:name=".favoritos" />
         <activity android:name=".topEspacios" />
         <activity android:name=".topMunicipios" />

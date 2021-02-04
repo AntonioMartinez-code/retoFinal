@@ -29,17 +29,15 @@ import java.util.ArrayList;
 
 public class DatosMunicipio extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private static final int REQUEST_IMAGE_CAPTURE =1;
     private TextView tNombre,tDescripcion;
     private Button btnUbicacion,btnCamara,btnAtras;
     private int CodUsu,CodMuniAuto,CodMuni;
-    private String nom,desc,imagenHash,ubicacion,existe,rutaImagen,cambio;
-    private ImageView imagen1;
+    private String nom,desc,ubicacion,existe,cambio;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
-    public static File foto;
     private Bitmap bit=null;
     private ArrayList<ObjetoMunicipios> variable=null;
+    static ArrayList<String> arrayEstaciones = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +48,6 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         btnAtras = findViewById(R.id.btnAtras);
         btnCamara = findViewById(R.id.btnCamara);
         btnUbicacion = findViewById(R.id.btnUbicacion);
-        imagen1 = findViewById(R.id.imageView);
         cbFav = findViewById(R.id.checkBox);
         cbFav.setOnCheckedChangeListener(this);
         nom = getIntent().getExtras().get("nombre").toString();
@@ -135,8 +132,9 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
                     //conectar();
                 }else if(tipo.equals("comprobar")){
                         existe = conectarComp();
-                }  else{
-                    Log.i("FFF",tipo);
+                }else if(tipo.equals("estaciones")){
+                arrayEstaciones = conectarEst();
+                }else{
                     conectarFav(tipo);
                 }
 
@@ -160,6 +158,17 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
             variable = clientThread.getResponse();
         }
         return clientThread.getResponse();
+    }
+
+    private ArrayList<String> conectarEst() throws InterruptedException {
+        String sql = "SELECT Nombre FROM estaciones WHERE CodMuniAuto="+CodMuniAuto+"";
+        String tipo = "estaciones";
+        ClientThread clientThread = new ClientThread(sql,tipo);
+        Thread thread = new Thread(clientThread);
+        thread.start();
+        thread.join();
+
+        return clientThread.getArrayString();
     }
 
     private void conectarFav(String tip) throws InterruptedException {
@@ -189,12 +198,33 @@ public class DatosMunicipio extends AppCompatActivity implements CompoundButton.
         return ret;
     }
 
+    public void datosMetereologicos(View v){
+
+        conectarOnClick("estaciones");
+        if(arrayEstaciones.size() == 0){
+            Toast.makeText(getApplicationContext(), "No hay datos metereologicos.", Toast.LENGTH_SHORT).show();
+        }else{
+            Intent i = new Intent(this, datosMetereologicos.class);
+            i.putExtra("codusu", CodUsu);
+            i.putExtra("codmun", CodMuni);
+            i.putExtra("codmuniauto", CodMuniAuto);
+            i.putExtra("nombre", nom);
+            i.putExtra("descripcion", desc);
+            i.putExtra("ubicacion", ubicacion);
+            startActivity(i);
+        }
+
+    }
+
     public void atras(View v){
         if(ubicacion.equals("lista")){
             Intent i = new Intent(this, municipios.class);
             startActivity(i);
-        }else{
+        }else if(ubicacion.equals("fav")){
             Intent i = new Intent(this, favoritos.class);
+            startActivity(i);
+        }else if(ubicacion.equals("top")){
+            Intent i = new Intent(this, topMunicipios.class);
             startActivity(i);
         }
     }

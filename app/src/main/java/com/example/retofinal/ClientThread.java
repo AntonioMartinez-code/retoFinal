@@ -19,6 +19,7 @@ public class ClientThread implements Runnable {
     private String sql;
     private String tipo;
     private Bitmap imagen;
+    private ArrayList<String> array = new ArrayList<String>();
     private ArrayList<Bitmap> imagenArray = new ArrayList<Bitmap>();
     private ArrayList<ObjetoMunicipios> arrayMun = new ArrayList<ObjetoMunicipios>();
     private ArrayList<ObjetoEspacios> arrayEsp = new ArrayList<ObjetoEspacios>();
@@ -48,14 +49,14 @@ public class ClientThread implements Runnable {
             Class.forName("com.mysql.jdbc.Driver");
 
             //Aqui pondriamos la IP y puerto.
-            sIP = "192.168.7.231";
+            //sIP = "192.168.7.231";
             //sIP= "192.168.7.223";//clase antonio
-            //sIP = "192.168.1.136";//casa
+            sIP = "192.168.56.1";//casa
             sPuerto = "3306";
             sBBDD = "retofinal";
 
             String url = "jdbc:mysql://" + sIP + ":" + sPuerto + "/" + sBBDD + "?serverTimezone=UTC";
-            con = DriverManager.getConnection(url, "root", "");
+            con = DriverManager.getConnection(url, "user1", "");
 
             switch(tipo){
 
@@ -165,6 +166,24 @@ public class ClientThread implements Runnable {
                         imagenArray.add(imagen);
                     }
                     break;
+                case "estaciones":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    array.clear();
+                    while (rs.next()) {
+                        array.add(rs.getString(1));
+                    }
+                    break;
+                case "datos":
+                    st = con.prepareStatement(sql);
+                    rs = st.executeQuery();
+                    array.clear();
+                    int i=0;
+                    while (rs.next()) {
+                        i ++;
+                        array.add(rs.getString(i));
+                    }
+                    break;
             }
 
         } catch (ClassNotFoundException e) {
@@ -218,6 +237,11 @@ public class ClientThread implements Runnable {
     public ArrayList<ObjetoEspacios> getArrayEsp() {
 
         return arrayEsp;
+    }
+
+    public ArrayList<String> getArrayString() {
+
+        return array;
     }
 }
 

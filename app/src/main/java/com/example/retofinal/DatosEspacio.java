@@ -30,15 +30,11 @@ import java.util.ArrayList;
 public class DatosEspacio extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     private TextView tNombre,tDescripcion;
-    private Button btnUbicacion,btnCamara,btnAtras;
-    private String nom,desc,imagenHash,ubicacion,existe,rutaImagen,cambio;
+    private String nom,desc,ubicacion,existe,cambio;
     private int CodUsu,CodEspacio;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    private ImageView imagen1;
     private CheckBox cbFav;
     private ConnectivityManager connectivityManager = null;
     ArrayList<ObjetoEspacios> variable = null;
-    public static File foto;
     private Bitmap bit=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +43,6 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
 
         tNombre= findViewById(R.id.tNombre);
         tDescripcion= findViewById(R.id.tDescripcion);
-        btnAtras = findViewById(R.id.btnAtras);
-        btnCamara = findViewById(R.id.btnCamara);
-        btnUbicacion = findViewById(R.id.btnUbicacion);
-        imagen1 = findViewById(R.id.imageView2);
         cbFav = findViewById(R.id.checkBox2);
         cbFav.setOnCheckedChangeListener(this);
         nom = getIntent().getExtras().get("nombre").toString();
@@ -124,7 +116,6 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
                 }else if(tipo.equals("comprobar")){
                     existe = conectarComp();
                 }  else{
-                    Log.i("FFF",tipo);
                     conectarFav(tipo);
                 }
             } else {
@@ -191,8 +182,11 @@ public class DatosEspacio extends AppCompatActivity implements CompoundButton.On
         if(ubicacion.equals("lista")){
             Intent i = new Intent(this, espacios.class);
             startActivity(i);
-        }else{
+        }else if(ubicacion.equals("fav")){
             Intent i = new Intent(this, favoritos.class);
+            startActivity(i);
+        }else if(ubicacion.equals("top")){
+            Intent i = new Intent(this, topEspacios.class);
             startActivity(i);
         }
 
